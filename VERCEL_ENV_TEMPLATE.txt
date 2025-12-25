@@ -1,0 +1,33 @@
+# Production Environment Variables for Vercel Backend
+# Copy these to Vercel Project Settings → Environment Variables
+
+# CRITICAL: Frontend CORS Configuration
+FRONTEND_ORIGIN=https://fugaji-smart.vercel.app
+
+# Django Core Settings
+DEBUG=False
+SECRET_KEY=REPLACE_WITH_SECURE_SECRET_KEY_FROM_VERCEL
+ALLOWED_HOSTS=backend-9e1d1i6y8-abdul-latif-abass-suleimans-projects.vercel.app,.vercel.app
+
+# Database (PostgreSQL recommended for production)
+DATABASE_URL=postgres://user:password@host:5432/database
+
+# CORS Settings (already handled by FRONTEND_ORIGIN above)
+CORS_ALLOW_CREDENTIALS=True
+
+# JWT Settings
+JWT_SECRET_KEY=REPLACE_WITH_SECURE_JWT_SECRET
+JWT_ALGORITHM=HS256
+JWT_ACCESS_TOKEN_LIFETIME=60
+JWT_REFRESH_TOKEN_LIFETIME=10080
+
+# Email Settings (configure for production)
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=your-email@gmail.com
+EMAIL_HOST_PASSWORD=your-app-password
+
+# Frontend URL
+FRONTEND_URL=https://fugaji-smart.vercel.app

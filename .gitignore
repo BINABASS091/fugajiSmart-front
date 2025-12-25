@@ -1,0 +1,35 @@
+# Ignore macOS system files
+.DS_Store
+
+# Node modules and build output
+node_modules/
+dist/
+
+# Python virtual environment
+venv/
+
+# Dependency lock file (optional, if using yarn instead)
+package-lock.json
+
+# Database and sensitive files
+backup.sql
+
+# Test artifacts
+# (Uncomment if you want to ignore all e2e tests)
+# e2e/
+
+# Environment and local config files
+.env
+
+# Log files
+*.log
+
+# Ignore IDE/editor folders
+.vscode/
+.idea/
+
+# Ignore system files
+Thumbs.db
+
+# Ignore public build artifacts (if any)
+public/build/
