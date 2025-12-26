@@ -98,7 +98,7 @@ export function BreedConfigurations() {
 
   const [breedForm, setBreedForm] = useState({
     breed_name: '',
-    breed_type: 'MEAT',
+    breed_type: 'BROILER',
     description: '',
     average_maturity_days: '0',
     production_lifespan_days: '0',
@@ -110,6 +110,30 @@ export function BreedConfigurations() {
     temperature_max_celsius: '0',
     humidity_min_percent: '0',
     humidity_max_percent: '0',
+    // Layer-specific fields
+    onset_of_lay_weeks: '',
+    laying_duration_weeks: '',
+    lighting_requirements_hours: '',
+    feed_before_lay_kg: '',
+    // Broiler-specific fields
+    growth_rate_days: '',
+    feed_conversion_ratio: '',
+    market_weight_kg: '',
+    // Dual-purpose fields
+    egg_production_dual: '',
+    body_weight_dual_kg: '',
+    // Housing and characteristics
+    recommended_housing_system: '',
+    suitability: '',
+    ideal_temperature_range: '',
+    ideal_humidity_range: '',
+    example_strains: '',
+    characteristics: '',
+    hardiness: '',
+    growth_speed: '',
+    feed_efficiency: '',
+    market_age_weeks: '',
+    best_for: '',
     is_active: true,
   });
 
@@ -173,19 +197,58 @@ export function BreedConfigurations() {
   const handleBreedSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    const breedData = {
-      ...breedForm,
-      average_maturity_days: parseInt(breedForm.average_maturity_days),
-      production_lifespan_days: parseInt(breedForm.production_lifespan_days),
-      average_weight_kg: parseFloat(breedForm.average_weight_kg),
-      eggs_per_year: parseInt(breedForm.eggs_per_year),
-      feed_consumption_daily_grams: parseFloat(breedForm.feed_consumption_daily_grams),
-      space_requirement_sqm: parseFloat(breedForm.space_requirement_sqm),
-      temperature_min_celsius: parseFloat(breedForm.temperature_min_celsius),
-      temperature_max_celsius: parseFloat(breedForm.temperature_max_celsius),
-      humidity_min_percent: parseFloat(breedForm.humidity_min_percent),
-      humidity_max_percent: parseFloat(breedForm.humidity_max_percent),
+    
+    // Helper to parse optional numeric fields
+    const parseOptional = (val: string, parser: (v: string) => number) => {
+      if (!val || val === '' || val === '0') return null;
+      return parser(val);
     };
+    
+    const breedData: any = {
+      ...breedForm,
+      average_maturity_days: parseInt(breedForm.average_maturity_days || '0'),
+      production_lifespan_days: parseInt(breedForm.production_lifespan_days || '0'),
+      average_weight_kg: parseFloat(breedForm.average_weight_kg || '0'),
+      eggs_per_year: parseInt(breedForm.eggs_per_year || '0'),
+      feed_consumption_daily_grams: parseFloat(breedForm.feed_consumption_daily_grams || '0'),
+      space_requirement_sqm: parseFloat(breedForm.space_requirement_sqm || '0'),
+      temperature_min_celsius: parseFloat(breedForm.temperature_min_celsius || '0'),
+      temperature_max_celsius: parseFloat(breedForm.temperature_max_celsius || '0'),
+      humidity_min_percent: parseFloat(breedForm.humidity_min_percent || '0'),
+      humidity_max_percent: parseFloat(breedForm.humidity_max_percent || '0'),
+      // Layer-specific fields
+      onset_of_lay_weeks: breedForm.onset_of_lay_weeks ? parseInt(breedForm.onset_of_lay_weeks) : null,
+      laying_duration_weeks: breedForm.laying_duration_weeks ? parseInt(breedForm.laying_duration_weeks) : null,
+      lighting_requirements_hours: breedForm.lighting_requirements_hours ? parseInt(breedForm.lighting_requirements_hours) : null,
+      feed_before_lay_kg: breedForm.feed_before_lay_kg ? parseFloat(breedForm.feed_before_lay_kg) : null,
+      // Broiler-specific fields
+      growth_rate_days: breedForm.growth_rate_days || null,
+      feed_conversion_ratio: breedForm.feed_conversion_ratio ? parseFloat(breedForm.feed_conversion_ratio) : null,
+      market_weight_kg: breedForm.market_weight_kg ? parseFloat(breedForm.market_weight_kg) : null,
+      // Dual-purpose fields
+      egg_production_dual: breedForm.egg_production_dual ? parseInt(breedForm.egg_production_dual) : null,
+      body_weight_dual_kg: breedForm.body_weight_dual_kg ? parseFloat(breedForm.body_weight_dual_kg) : null,
+      // Housing and characteristics
+      recommended_housing_system: breedForm.recommended_housing_system || null,
+      suitability: breedForm.suitability || null,
+      ideal_temperature_range: breedForm.ideal_temperature_range || null,
+      ideal_humidity_range: breedForm.ideal_humidity_range || null,
+      example_strains: breedForm.example_strains || null,
+      characteristics: breedForm.characteristics || null,
+      hardiness: breedForm.hardiness || null,
+      growth_speed: breedForm.growth_speed || null,
+      feed_efficiency: breedForm.feed_efficiency || null,
+      market_age_weeks: breedForm.market_age_weeks || null,
+      best_for: breedForm.best_for || null,
+    };
+    
+    // Remove empty strings to avoid sending unnecessary data
+    Object.keys(breedData).forEach(key => {
+      if (breedData[key] === '' || (breedData[key] !== 0 && !breedData[key])) {
+        delete breedData[key];
+      }
+    });
+    
     const { error } = editingBreed
       ? await breedConfigurationsApi.update(editingBreed.id, breedData)
       : await breedConfigurationsApi.create(breedData);

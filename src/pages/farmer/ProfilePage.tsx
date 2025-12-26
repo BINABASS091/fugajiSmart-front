@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { authApi } from '../../lib/api';
+import { authApi, API_BASE_URL } from '../../lib/api';
 import { useLanguage } from '../../contexts/LanguageContext';
 import {
   User as UserIcon,
@@ -16,19 +16,34 @@ import {
   UserCheck,
   Zap,
   Star,
-  Globe
+  Globe,
+  X,
+  Check
 } from 'lucide-react';
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
 
+// Helper function to get full avatar URL
+const getAvatarUrl = (avatarUrl: string | null | undefined): string | null => {
+  if (!avatarUrl) return null;
+  // If it's already a full URL, return it
+  if (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://') || avatarUrl.startsWith('data:')) {
+    return avatarUrl;
+  }
+  // If it's a relative URL, prepend the API base URL
+  const baseUrl = API_BASE_URL.replace('/api/v1', '');
+  return `${baseUrl}${avatarUrl.startsWith('/') ? avatarUrl : '/' + avatarUrl}`;
+};
+
 export function ProfilePage() {
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const { t } = useLanguage();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [message, setMessage] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
@@ -51,36 +66,65 @@ export function ProfilePage() {
         phone_number: user.phone || '',
         experience_years: (user as any).farmer_profile?.experience_years || 0,
       });
-      setLoading(false);
-      try {
-        const fromUser = (user as any).avatar_url as string | undefined;
-        if (fromUser) {
-          setAvatarPreview(fromUser);
+      
+      // Set avatar preview from user data
+      const avatarUrl = getAvatarUrl((user as any).farmer_profile?.avatar_url || user.avatar_url);
+      if (avatarUrl) {
+        setAvatarPreview(avatarUrl);
         } else {
+        // Fallback to localStorage if no avatar from backend
           const stored = localStorage.getItem('profile_avatar');
           if (stored) setAvatarPreview(stored);
         }
-      } catch { }
+      
+      setLoading(false);
     }
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
-    setMessage('');
+    setMessage(null);
+    
     try {
-      const updatedProfile = {
-        ...user,
-        first_name: profileData.full_name.split(' ')[0] || '',
-        last_name: profileData.full_name.split(' ').slice(1).join(' ') || '',
+      // Update profile via API
+      const response = await authApi.getCurrentUser(); // Get current user first to check structure
+      
+      if (response.error) {
+        throw new Error(response.error);
+      }
+
+      // Update user profile
+      const updateResponse = await fetch(`${API_BASE_URL}/auth/profile/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
         phone: profileData.phone_number,
-      };
-      localStorage.setItem('profile', JSON.stringify(updatedProfile));
-      setMessage('Configuration synchronized successfully!');
-      setTimeout(() => setMessage(''), 3000);
-    } catch (error) {
-      console.error('Error updating profile:', error);
-      setMessage('Synchronization failed');
+          business_name: profileData.business_name,
+          location: profileData.location,
+          experience_years: profileData.experience_years,
+        }),
+      });
+
+      if (!updateResponse.ok) {
+        const errorData = await updateResponse.text();
+        throw new Error(errorData || 'Failed to update profile');
+      }
+
+      // Refresh user data to get updated profile
+      await refreshUser();
+      
+      setMessage({ text: 'Profile updated successfully!', type: 'success' });
+      setTimeout(() => setMessage(null), 3000);
+    } catch (error: any) {
+      setMessage({ 
+        text: error.message || 'Failed to update profile. Please try again.', 
+        type: 'error' 
+      });
+      setTimeout(() => setMessage(null), 5000);
     } finally {
       setSaving(false);
     }
@@ -93,29 +137,80 @@ export function ProfilePage() {
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Validate file type
     if (!file.type.startsWith('image/')) {
-      setMessage('Binary format error: Select image file.');
-      setTimeout(() => setMessage(''), 2500);
+      setMessage({ text: 'Please select a valid image file (JPG, PNG, etc.)', type: 'error' });
+      setTimeout(() => setMessage(null), 3000);
       return;
     }
+
+    // Validate file size (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSize) {
+      setMessage({ text: 'Image size must be less than 5MB', type: 'error' });
+      setTimeout(() => setMessage(null), 3000);
+      return;
+    }
+
+    // Show preview immediately
     const reader = new FileReader();
-    reader.onload = () => setAvatarPreview(String(reader.result || ''));
+    reader.onload = () => {
+      setAvatarPreview(String(reader.result || ''));
+    };
     reader.readAsDataURL(file);
+
+    // Upload to server
     try {
-      setSaving(true);
+      setUploadingAvatar(true);
+      setMessage(null);
+      
       const res = await authApi.uploadAvatar(file);
+      
       if (res.error) {
-        setMessage(res.error || 'Upload error');
+        setMessage({ text: res.error || 'Failed to upload avatar', type: 'error' });
+        // Revert to previous avatar on error
+        const avatarUrl = getAvatarUrl((user as any)?.farmer_profile?.avatar_url || (user as any)?.avatar_url);
+        setAvatarPreview(avatarUrl || null);
       } else if (res.data?.avatar_url) {
-        setAvatarPreview(res.data.avatar_url);
-        try { localStorage.setItem('profile_avatar', res.data.avatar_url); } catch { }
-        setMessage('Biometric visual updated');
+        // Get full URL
+        const fullAvatarUrl = getAvatarUrl(res.data.avatar_url);
+        setAvatarPreview(fullAvatarUrl);
+        
+        // Store in localStorage as backup
+        try {
+          if (fullAvatarUrl) {
+            localStorage.setItem('profile_avatar', fullAvatarUrl);
+          }
+        } catch (err) {
+          // Ignore localStorage errors
+        }
+        
+        // Refresh user data to get updated avatar
+        await refreshUser();
+        
+        setMessage({ text: 'Profile picture updated successfully!', type: 'success' });
+        setTimeout(() => setMessage(null), 3000);
+      } else {
+        throw new Error('No avatar URL returned from server');
       }
-    } catch (err) {
-      console.error(err);
-      setMessage('Visual uplink failed');
+    } catch (err: any) {
+      setMessage({ 
+        text: err.message || 'Failed to upload avatar. Please try again.', 
+        type: 'error' 
+      });
+      
+      // Revert to previous avatar on error
+      const avatarUrl = getAvatarUrl((user as any)?.farmer_profile?.avatar_url || (user as any)?.avatar_url);
+      setAvatarPreview(avatarUrl || null);
+      
+      setTimeout(() => setMessage(null), 5000);
     } finally {
-      setSaving(false);
+      setUploadingAvatar(false);
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
     }
   };
 
@@ -146,10 +241,17 @@ export function ProfilePage() {
         </div>
         <div className="flex items-center gap-4">
           {message && (
-            <div className={`px-4 py-2 rounded-xl border text-[10px] font-black uppercase tracking-widest animate-[fadeIn_0.3s_ease-out] ${message.includes('sync') || message.includes('updated')
+            <div className={`px-4 py-2 rounded-xl border text-[10px] font-black uppercase tracking-widest animate-[fadeIn_0.3s_ease-out] flex items-center gap-2 ${
+              message.type === 'success'
               ? 'bg-emerald-50 text-emerald-600 border-emerald-100'
-              : 'bg-rose-50 text-rose-600 border-rose-100'}`}>
-              {message}
+                : 'bg-rose-50 text-rose-600 border-rose-100'
+            }`}>
+              {message.type === 'success' ? (
+                <Check className="w-3 h-3" />
+              ) : (
+                <X className="w-3 h-3" />
+              )}
+              {message.text}
             </div>
           )}
         </div>
@@ -165,21 +267,52 @@ export function ProfilePage() {
               <div className="relative group/avatar">
                 <div className="w-40 h-40 rounded-[2.5rem] overflow-hidden border-4 border-white/20 shadow-2xl relative">
                   {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
+                    <img 
+                      src={avatarPreview} 
+                      alt="Profile Avatar" 
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to initials if image fails to load
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const parent = target.parentElement;
+                        if (parent) {
+                          const fallback = document.createElement('div');
+                          fallback.className = 'w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-black text-white';
+                          fallback.textContent = (profileData.full_name || 'U')[0].toUpperCase();
+                          parent.appendChild(fallback);
+                        }
+                      }}
+                    />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-black">
-                      {(profileData.full_name || 'U')[0].toUpperCase()}
+                    <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-4xl font-black text-white">
+                      {(profileData.full_name || user?.email || 'U')[0].toUpperCase()}
                     </div>
                   )}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center cursor-pointer" onClick={handleAvatarClick}>
-                    <Camera className="w-8 h-8" />
+                  {uploadingAvatar && (
+                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                      <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  )}
+                  <div 
+                    className="absolute inset-0 bg-black/40 opacity-0 group-hover/avatar:opacity-100 transition-opacity flex items-center justify-center cursor-pointer" 
+                    onClick={handleAvatarClick}
+                    title="Click to upload new profile picture"
+                  >
+                    <Camera className="w-8 h-8 text-white" />
                   </div>
                 </div>
                 <button
                   onClick={handleAvatarClick}
-                  className="absolute -bottom-2 -right-2 w-12 h-12 bg-white text-gray-900 rounded-2xl shadow-xl flex items-center justify-center hover:scale-110 transition-transform"
+                  disabled={uploadingAvatar}
+                  className="absolute -bottom-2 -right-2 w-12 h-12 bg-white text-gray-900 rounded-2xl shadow-xl flex items-center justify-center hover:scale-110 transition-transform disabled:opacity-50 disabled:cursor-not-allowed"
+                  title="Upload profile picture"
                 >
+                  {uploadingAvatar ? (
+                    <div className="w-5 h-5 border-2 border-gray-900 border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
                   <Camera className="w-5 h-5" />
+                  )}
                 </button>
               </div>
 
@@ -344,9 +477,10 @@ export function ProfilePage() {
           <input
             ref={fileInputRef}
             type="file"
-            accept="image/*"
+            accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
             className="hidden"
             onChange={handleAvatarChange}
+            disabled={uploadingAvatar}
           />
         </div>
       </div>

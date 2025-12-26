@@ -1,0 +1,16 @@
+Category,Subcategory,Item Name,Quantity,Unit,Cost per Unit,Reorder Level,Supplier,Expiry Date,Purchase Date,Batch Number,Location,Barcode,Notes
+FEED,COMPLETE_FEEDS,Starter feed,100,kg,2.50,20,ABC Feed Suppliers,2025-12-31,2025-01-15,BATCH001,Warehouse A,1234567890123,High quality starter feed
+FEED,FEED_INGREDIENTS,Maize / Corn,500,kg,1.20,100,Local Supplier,2025-06-30,2025-01-10,BATCH002,Warehouse B,1234567890124,Crushed maize
+MEDICINE,VACCINES,Newcastle Disease (ND),50,doses,5.00,10,Vet Supplies Ltd,2025-08-31,2025-01-05,BATCH003,Cold Storage,1234567890125,Requires refrigeration
+MEDICINE,DRUGS_TREATMENTS,Antibiotics,20,ml,3.50,5,Pharma Co,2025-09-30,2025-01-08,BATCH004,Medicine Cabinet,1234567890126,For bacterial infections
+EQUIPMENT,POULTRY_HOUSE_EQUIPMENT,Feeders (manual/automatic),25,pcs,15.00,5,Equipment Store,2025-12-31,2025-01-12,BATCH005,Equipment Shed,1234567890127,Automatic feeders
+EGGS,EGG_TYPES,Table eggs,500,pcs,0.15,100,Own Production,2025-02-15,2025-01-20,BATCH006,Egg Storage,1234567890128,Fresh eggs
+WATER,WATER_EQUIPMENT,Water tanks,5,pcs,200.00,1,Water Systems Inc,2025-12-31,2025-01-18,BATCH007,Water Station,1234567890129,500L capacity
+HATCHERY,HATCHERY_EQUIPMENT,Incubators,2,pcs,5000.00,1,Hatchery Equipment,2025-12-31,2025-01-01,BATCH008,Hatchery Room,1234567890130,1000 egg capacity
+WASTE,WASTE_PRODUCTS,Poultry manure,1000,kg,0.10,0,Own Production,2025-12-31,2025-01-25,BATCH009,Compost Area,1234567890131,Organic fertilizer
+MACHINERY,FARM_MACHINERY,Generators,1,pcs,3000.00,1,Power Systems,2025-12-31,2025-01-05,BATCH010,Generator Room,1234567890132,10KVA generator
+OFFICE,DIGITAL_EQUIPMENT,Tablets,3,pcs,300.00,1,Tech Store,2025-12-31,2025-01-10,BATCH011,Office,1234567890133,For farm management
+FINANCIAL,FINANCIAL_RECORDS,Purchase invoices,100,records,0.00,10,Own Records,2025-12-31,2025-01-01,BATCH012,Office Files,1234567890134,Financial records
+EMERGENCY,EMERGENCY_STOCK,Fire extinguishers,5,pcs,50.00,2,Safety Supplies,2025-12-31,2025-01-15,BATCH013,Emergency Station,1234567890135,Fire safety equipment
+
+

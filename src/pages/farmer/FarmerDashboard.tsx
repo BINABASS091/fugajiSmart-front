@@ -78,7 +78,7 @@ export function FarmerDashboard() {
 
       const recentBatchesData = batchesData
         .map(batch => {
-          const farm = farmsData.find(f => f.id === batch.farm_id);
+          const farm = farmsData.find(f => f.id === batch.farm);
           return {
             ...batch,
             farm: farm ? { name: farm.name } : null,
@@ -125,7 +125,7 @@ export function FarmerDashboard() {
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-3">
-            <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest rounded-lg">Operational Live</span>
+            <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-black uppercase tracking-widest rounded-lg">{t('dashboard.operational_live')}</span>
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           </div>
           <h1 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
@@ -139,7 +139,7 @@ export function FarmerDashboard() {
             {format(new Date(), 'MMMM d, yyyy')}
           </button>
           <Link to="/farmer/activities" className="flex items-center gap-2 px-6 py-4 bg-gray-900 text-white rounded-2xl shadow-lg shadow-gray-200 hover:-translate-y-1 transition-all font-black text-[10px] uppercase tracking-widest">
-            Action Center
+            {t('dashboard.action_center')}
             <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
@@ -155,14 +155,14 @@ export function FarmerDashboard() {
                 <Warehouse className="w-8 h-8" />
               </div>
               <div className="px-4 py-1.5 bg-white/20 rounded-full backdrop-blur-md text-[10px] font-black tracking-widest uppercase">
-                {stats.activeFarms} Active
+                {stats.activeFarms} {t('dashboard.active')}
               </div>
             </div>
             <div>
               <h3 className="text-sm font-bold opacity-80 uppercase tracking-widest mb-1">{t('dashboard.activeFarms')}</h3>
               <div className="flex items-baseline gap-2">
                 <span className="text-5xl font-black">{stats.totalFarms}</span>
-                <span className="text-lg font-bold opacity-60">Farms Total</span>
+                <span className="text-lg font-bold opacity-60">{t('dashboard.farms_total')}</span>
               </div>
             </div>
           </div>
@@ -183,7 +183,7 @@ export function FarmerDashboard() {
               <h3 className="text-sm font-bold opacity-80 uppercase tracking-widest mb-1">{t('dashboard.totalBirds')}</h3>
               <div className="flex items-baseline gap-2">
                 <span className="text-5xl font-black">{stats.totalBirds.toLocaleString()}</span>
-                <span className="text-lg font-bold opacity-60">Birds Tracking</span>
+                <span className="text-lg font-bold opacity-60">{t('dashboard.birds_tracking')}</span>
               </div>
             </div>
           </div>
@@ -197,14 +197,14 @@ export function FarmerDashboard() {
                 <AlertTriangle className="w-8 h-8" />
               </div>
               <div className="px-4 py-1.5 bg-white/20 rounded-full backdrop-blur-md text-[10px] font-black tracking-widest uppercase">
-                Action Required
+                {t('dashboard.action_required')}
               </div>
             </div>
             <div>
               <h3 className="text-sm font-bold opacity-80 uppercase tracking-widest mb-1">{t('dashboard.alerts')}</h3>
               <div className="flex items-baseline gap-2">
                 <span className="text-5xl font-black">{stats.criticalAlerts}</span>
-                <span className="text-lg font-bold opacity-60">Critical Alerts</span>
+                <span className="text-lg font-bold opacity-60">{t('dashboard.critical_alerts')}</span>
               </div>
             </div>
           </div>
@@ -246,7 +246,7 @@ export function FarmerDashboard() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-black text-gray-900 tracking-tight uppercase">{t('dashboard.recentBatches')}</h2>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Operational Pulse</p>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">{t('dashboard.operational_pulse')}</p>
               </div>
               <Link to="/farmer/batches" className="flex items-center gap-2 group text-blue-600 font-black text-[10px] uppercase tracking-widest">
                 {t('dashboard.viewAll')}
@@ -301,11 +301,11 @@ export function FarmerDashboard() {
                 <ShieldCheck className="w-10 h-10 text-emerald-400" />
               </div>
               <div className="flex-1 text-center md:text-left">
-                <h3 className="text-2xl font-black tracking-tight mb-2 uppercase">Health Shield Operational</h3>
-                <p className="text-gray-400 font-medium leading-relaxed">System AI is actively monitoring all environmental sensors and mortality trends across your operational batches.</p>
+                <h3 className="text-2xl font-black tracking-tight mb-2 uppercase">{t('dashboard.health_shield')}</h3>
+                <p className="text-gray-400 font-medium leading-relaxed">{t('dashboard.health_shield_desc')}</p>
               </div>
               <Link to="/disease-prediction" className="px-8 py-5 bg-blue-600 hover:bg-blue-700 rounded-3xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-900/40 transition-all hover:scale-105">
-                Launch Analysis
+                {t('dashboard.launch_analysis')}
               </Link>
             </div>
           </div>
@@ -323,8 +323,8 @@ export function FarmerDashboard() {
             <div className="bg-white rounded-[40px] border border-gray-100 p-8 shadow-xl shadow-gray-200/40">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h2 className="text-xl font-black text-gray-900 tracking-tight uppercase">System Alerts</h2>
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1 tracking-widest">{stats.unreadAlerts} Actionable Items</p>
+                  <h2 className="text-xl font-black text-gray-900 tracking-tight uppercase">{t('dashboard.system_alerts')}</h2>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1 tracking-widest">{stats.unreadAlerts} {t('dashboard.actionable_items')}</p>
                 </div>
                 <Link to="/farmer/alerts" className="p-3 bg-gray-50 text-gray-400 hover:bg-rose-50 hover:text-rose-600 rounded-2xl transition-all">
                   <Bell className="w-5 h-5" />
@@ -359,7 +359,7 @@ export function FarmerDashboard() {
               </div>
 
               <Link to="/farmer/alerts" className="mt-8 flex items-center justify-center gap-3 w-full py-5 border-2 border-gray-50 rounded-3xl text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 hover:bg-gray-50 hover:text-gray-900 transition-all">
-                Archive Access
+                {t('dashboard.archive_access')}
                 <ChevronRight className="w-4 h-4" />
               </Link>
             </div>
@@ -371,8 +371,8 @@ export function FarmerDashboard() {
               <Zap className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Intelligence Pulse</h4>
-              <p className="text-sm font-bold text-gray-600 leading-snug">Consistent mortality logging improves prediction accuracy by 40%.</p>
+              <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">{t('dashboard.intelligence_pulse')}</h4>
+              <p className="text-sm font-bold text-gray-600 leading-snug">{t('dashboard.mortality_tip')}</p>
             </div>
           </div>
         </div>

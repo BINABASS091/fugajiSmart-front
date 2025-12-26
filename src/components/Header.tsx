@@ -3,10 +3,23 @@ import { useEffect, useState } from 'react';
 import { dataService } from '../services/dataService';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { API_BASE_URL } from '../lib/api';
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
+
+// Helper function to get full avatar URL
+const getAvatarUrl = (avatarUrl: string | null | undefined): string | null => {
+  if (!avatarUrl) return null;
+  // If it's already a full URL, return it
+  if (avatarUrl.startsWith('http://') || avatarUrl.startsWith('https://') || avatarUrl.startsWith('data:')) {
+    return avatarUrl;
+  }
+  // If it's a relative URL, prepend the API base URL
+  const baseUrl = API_BASE_URL.replace('/api/v1', '');
+  return `${baseUrl}${avatarUrl.startsWith('/') ? avatarUrl : '/' + avatarUrl}`;
+};
 
 export function Header({ onMenuClick }: HeaderProps) {
   const { user } = useAuth();
@@ -36,20 +49,31 @@ export function Header({ onMenuClick }: HeaderProps) {
   }, [user]);
 
   useEffect(() => {
-    if (user && (user as any).avatar_url) {
-      setAvatarUrl((user as any).avatar_url as string);
-      return;
-    }
-    try {
-      const stored = localStorage.getItem('profile_avatar');
-      setAvatarUrl(stored || null);
-    } catch {
+    if (user) {
+      // Try to get avatar from farmer_profile first, then from user, then localStorage
+      const profileAvatar = (user as any).farmer_profile?.avatar_url;
+      const userAvatar = (user as any).avatar_url;
+      const avatarUrl = getAvatarUrl(profileAvatar || userAvatar);
+      
+      if (avatarUrl) {
+        setAvatarUrl(avatarUrl);
+      } else {
+        // Fallback to localStorage
+        try {
+          const stored = localStorage.getItem('profile_avatar');
+          setAvatarUrl(stored || null);
+        } catch {
+          setAvatarUrl(null);
+        }
+      }
+    } else {
       setAvatarUrl(null);
     }
   }, [user]);
 
   const toggleLanguage = () => {
-    setLanguage(language === 'en' ? 'sw' : 'en');
+    const newLang = language === 'en' ? 'sw' : 'en';
+    setLanguage(newLang);
     setShowLangMenu(false);
   };
 
@@ -131,7 +155,23 @@ export function Header({ onMenuClick }: HeaderProps) {
                 <div className="w-11 h-11 rounded-[1.25rem] bg-gradient-to-tr from-blue-600 to-indigo-700 p-0.5 shadow-lg shadow-blue-200 group-hover:scale-105 transition-all">
                   <div className="w-full h-full rounded-[1.125rem] bg-white p-0.5 overflow-hidden">
                     {avatarUrl ? (
-                      <img src={avatarUrl} alt="User Avatar" className="w-full h-full object-cover rounded-[1rem]" />
+                      <img 
+                        src={avatarUrl} 
+                        alt="User Avatar" 
+                        className="w-full h-full object-cover rounded-[1rem]"
+                        onError={(e) => {
+                          // Fallback to initials if image fails to load
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                          const parent = target.parentElement;
+                          if (parent) {
+                            const fallback = document.createElement('div');
+                            fallback.className = 'w-full h-full bg-blue-50 text-blue-600 rounded-[1rem] flex items-center justify-center text-sm font-black';
+                            fallback.textContent = (user?.first_name || user?.email || 'U')[0].toUpperCase();
+                            parent.appendChild(fallback);
+                          }
+                        }}
+                      />
                     ) : (
                       <div className="w-full h-full bg-blue-50 text-blue-600 rounded-[1rem] flex items-center justify-center text-sm font-black">
                         {(user?.first_name || user?.email || 'U')[0].toUpperCase()}

@@ -206,9 +206,9 @@ export function Login() {
               />
             </div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent mb-2">
-              Welcome Back
+              {t('auth.welcomeBack', 'Welcome Back')}
             </h1>
-            <p className="text-gray-600">Sign in to manage your poultry farm</p>
+            <p className="text-gray-600">{t('auth.signInDescription', 'Sign in to manage your poultry farm')}</p>
           </div>
 
           {/* Error Alert */}
@@ -223,7 +223,7 @@ export function Login() {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
-                Email Address
+                {t('auth.email')}
               </Label>
               <div className="relative mt-1.5">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -245,7 +245,7 @@ export function Login() {
 
             <div>
               <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
-                Password
+                {t('auth.password')}
               </Label>
               <Input
                 id="password"
@@ -267,12 +267,12 @@ export function Login() {
               {loading ? (
                 <>
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                  Signing in...
+                  {t('auth.signingIn', 'Signing in...')}
                 </>
               ) : (
                 <>
                   <LogIn className="w-4 h-4 mr-2" />
-                  Sign In
+                  {t('auth.loginButton')}
                 </>
               )}
             </Button>
@@ -284,7 +284,7 @@ export function Login() {
               <div className="w-full border-t border-gray-200"></div>
             </div>
             <div className="relative flex justify-center text-sm">
-              <span className="px-4 bg-white text-gray-500">Or continue with</span>
+              <span className="px-4 bg-white text-gray-500">{t('auth.orContinueWith', 'Or continue with')}</span>
             </div>
           </div>
 
@@ -314,15 +314,15 @@ export function Login() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            Sign in with Google
+            {t('auth.signInWithGoogle', 'Sign in with Google')}
           </Button>
 
           {/* Footer Links */}
           <div className="mt-8 space-y-3 text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              {t('auth.noAccount')}{' '}
               <Link to="/signup" className="text-green-600 hover:text-green-700 font-semibold">
-                Sign up
+                {t('auth.signupHere')}
               </Link>
             </p>
           </div>

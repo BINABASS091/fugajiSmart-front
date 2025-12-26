@@ -11,6 +11,7 @@ interface InventoryItem {
   id?: string;
   name: string;
   category: string;
+  subcategory?: string | null;
   quantity: number;
   unit: string;
   cost_per_unit: number;
@@ -20,7 +21,17 @@ interface InventoryItem {
   purchase_date?: string | null;
   feed_type?: string | null;
   consumption_rate_per_day?: number | null;
-  course_days?: number | null; // for medicine courses
+  course_days?: number | null;
+  barcode?: string | null;
+  batch_number?: string | null;
+  location?: string | null;
+  requires_refrigeration?: boolean;
+  is_iot_device?: boolean;
+  is_emergency_stock?: boolean;
+  batch?: string | null;
+  age_days?: number | null;
+  average_weight?: number | null;
+  notes?: string | null;
 }
 
 interface AddInventoryItemModalProps {

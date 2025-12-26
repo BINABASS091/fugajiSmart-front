@@ -31,6 +31,7 @@ interface InventoryItem {
   id: string;
   name: string;
   category: string;
+  subcategory?: string | null;
   quantity: number;
   unit: string;
   cost_per_unit: number;
@@ -41,15 +42,36 @@ interface InventoryItem {
   feed_type?: string | null;
   consumption_rate_per_day?: number | null;
   course_days?: number | null;
+  barcode?: string | null;
+  batch_number?: string | null;
+  location?: string | null;
+  requires_refrigeration?: boolean;
+  is_iot_device?: boolean;
+  is_emergency_stock?: boolean;
+  batch?: string | null;
+  age_days?: number | null;
+  average_weight?: number | null;
+  notes?: string | null;
+  farmer?: string;
+  farm?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }
 
 interface InventoryTransaction {
   id: string;
+  item: string;
   item_name: string;
-  transaction_type: string;
+  batch?: string | null;
+  batch_id?: string | null;
+  batch_number?: string | null;
+  transaction_type: 'PURCHASE' | 'USAGE' | 'ADJUSTMENT' | 'RETURN' | 'WASTE';
   quantity_change: number;
+  unit_cost?: number | null;
+  total_cost?: number | null;
   transaction_date: string;
-  notes: string;
+  notes?: string | null;
+  created_at?: string;
 }
 
 const InventoryManagement: React.FC = () => {
@@ -61,7 +83,7 @@ const InventoryManagement: React.FC = () => {
   const [showTransactionModal, setShowTransactionModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
   const [view, setView] = useState<'items' | 'history'>('items');
-  const [filterCategory, setFilterCategory] = useState<'ALL' | 'FEED' | 'MEDICINE' | 'VACCINE' | 'EQUIPMENT' | 'OTHER'>('ALL');
+  const [filterCategory, setFilterCategory] = useState<'ALL' | 'LIVE_BIRDS' | 'FEED' | 'MEDICINE' | 'SUPPLEMENTS' | 'EGGS' | 'EQUIPMENT' | 'SANITATION' | 'UTILITIES' | 'STORAGE' | 'TRANSPORT' | 'LABOR' | 'SALES' | 'EMERGENCY' | 'WATER' | 'HATCHERY' | 'WASTE' | 'MACHINERY' | 'OFFICE' | 'FINANCIAL'>('ALL');
   const [searchQuery, setSearchQuery] = useState('');
 
   const [showWeightModal, setShowWeightModal] = useState(false);

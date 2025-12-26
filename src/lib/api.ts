@@ -114,13 +114,59 @@ export const batchesApi = {
 
 // Inventory API
 export const inventoryApi = {
-  // Get all inventory items
-  getItems: async () => {
-    return fetchApi('/inventory/');
+  // Get all inventory items with optional filters
+  getItems: async (params?: {
+    category?: string;
+    subcategory?: string;
+    farm?: string;
+    search?: string;
+    is_iot_device?: boolean;
+    is_emergency_stock?: boolean;
+    ordering?: string;
+  }) => {
+    const queryString = params ? '?' + new URLSearchParams(
+      Object.entries(params).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>)
+    ).toString() : '';
+    return fetchApi(`/inventory/${queryString}`);
+  },
+
+  // Get single inventory item by ID
+  getItem: async (id: string) => {
+    return fetchApi(`/inventory/${id}/`);
   },
 
   // Create new inventory item
-  createItem: async (data: any) => {
+  createItem: async (data: {
+    name: string;
+    category: string;
+    subcategory?: string | null;
+    quantity: number;
+    unit: string;
+    cost_per_unit: number;
+    reorder_level?: number;
+    supplier?: string | null;
+    expiry_date?: string | null;
+    purchase_date?: string | null;
+    feed_type?: string | null;
+    consumption_rate_per_day?: number | null;
+    course_days?: number | null;
+    barcode?: string | null;
+    batch_number?: string | null;
+    location?: string | null;
+    requires_refrigeration?: boolean;
+    is_iot_device?: boolean;
+    is_emergency_stock?: boolean;
+    farm?: string | null;
+    batch?: string | null;
+    age_days?: number | null;
+    average_weight?: number | null;
+    notes?: string | null;
+  }) => {
     return fetchApi('/inventory/', {
       method: 'POST',
       body: JSON.stringify(data),
@@ -128,23 +174,201 @@ export const inventoryApi = {
   },
 
   // Update inventory item
-  updateItem: async (id: string, data: any) => {
+  updateItem: async (id: string, data: Partial<{
+    name: string;
+    category: string;
+    subcategory?: string | null;
+    quantity: number;
+    unit: string;
+    cost_per_unit: number;
+    reorder_level?: number;
+    supplier?: string | null;
+    expiry_date?: string | null;
+    purchase_date?: string | null;
+    feed_type?: string | null;
+    consumption_rate_per_day?: number | null;
+    course_days?: number | null;
+    barcode?: string | null;
+    batch_number?: string | null;
+    location?: string | null;
+    requires_refrigeration?: boolean;
+    is_iot_device?: boolean;
+    is_emergency_stock?: boolean;
+    farm?: string | null;
+    batch?: string | null;
+    age_days?: number | null;
+    average_weight?: number | null;
+    notes?: string | null;
+  }>) => {
     return fetchApi(`/inventory/${id}/`, {
       method: 'PATCH',
       body: JSON.stringify(data),
     });
   },
 
-  // Get transactions
-  getTransactions: async (params?: any) => {
-    const queryString = params ? '?' + new URLSearchParams(params).toString() : '';
+  // Delete inventory item
+  deleteItem: async (id: string) => {
+    return fetchApi(`/inventory/${id}/`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Get transactions with optional filters
+  getTransactions: async (params?: {
+    item?: string;
+    transaction_type?: string;
+    ordering?: string;
+  }) => {
+    const queryString = params ? '?' + new URLSearchParams(
+      Object.entries(params).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>)
+    ).toString() : '';
     return fetchApi(`/inventory-transactions/${queryString}`);
   },
 
   // Create transaction (add stock/use stock)
-  createTransaction: async (data: any) => {
+  createTransaction: async (data: {
+    item: string;
+    transaction_type: 'PURCHASE' | 'USAGE' | 'ADJUSTMENT' | 'RETURN' | 'WASTE';
+    quantity_change: number;
+    unit_cost?: number | null;
+    notes?: string | null;
+    batch?: string | null;
+  }) => {
     return fetchApi('/inventory-transactions/', {
       method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Get transaction by ID
+  getTransaction: async (id: string) => {
+    return fetchApi(`/inventory-transactions/${id}/`);
+  },
+};
+
+// Feed Consumption API
+export const feedConsumptionApi = {
+  // Get all feed consumption records
+  getAll: async (params?: {
+    batch?: string;
+    inventory_item?: string;
+    date?: string;
+    ordering?: string;
+  }) => {
+    const queryString = params ? '?' + new URLSearchParams(
+      Object.entries(params).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>)
+    ).toString() : '';
+    return fetchApi(`/feed-consumption/${queryString}`);
+  },
+
+  // Get single feed consumption record
+  getById: async (id: string) => {
+    return fetchApi(`/feed-consumption/${id}/`);
+  },
+
+  // Create feed consumption record
+  create: async (data: {
+    batch: string;
+    inventory_item: string;
+    quantity_used: number;
+    unit_cost?: number | null;
+    date?: string;
+    notes?: string | null;
+    transaction?: string | null;
+  }) => {
+    return fetchApi('/feed-consumption/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Update feed consumption record
+  update: async (id: string, data: Partial<{
+    batch: string;
+    inventory_item: string;
+    quantity_used: number;
+    unit_cost?: number | null;
+    date?: string;
+    notes?: string | null;
+  }>) => {
+    return fetchApi(`/feed-consumption/${id}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Delete feed consumption record
+  delete: async (id: string) => {
+    return fetchApi(`/feed-consumption/${id}/`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// Inventory Alerts API
+export const inventoryAlertsApi = {
+  // Get all inventory alerts
+  getAll: async (params?: {
+    item?: string;
+    alert_type?: string;
+    severity?: string;
+    is_resolved?: boolean;
+    ordering?: string;
+  }) => {
+    const queryString = params ? '?' + new URLSearchParams(
+      Object.entries(params).reduce((acc, [key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+          acc[key] = String(value);
+        }
+        return acc;
+      }, {} as Record<string, string>)
+    ).toString() : '';
+    return fetchApi(`/inventory-alerts/${queryString}`);
+  },
+
+  // Get single alert
+  getById: async (id: string) => {
+    return fetchApi(`/inventory-alerts/${id}/`);
+  },
+
+  // Resolve an alert
+  resolve: async (id: string) => {
+    return fetchApi(`/inventory-alerts/${id}/resolve/`, {
+      method: 'POST',
+    });
+  },
+
+  // Create alert (usually done by system, but can be manual)
+  create: async (data: {
+    item: string;
+    alert_type: 'LOW_STOCK' | 'EXPIRY_WARNING' | 'EXPIRED' | 'OUT_OF_STOCK' | 'HIGH_CONSUMPTION';
+    message: string;
+    severity?: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  }) => {
+    return fetchApi('/inventory-alerts/', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Update alert
+  update: async (id: string, data: Partial<{
+    message: string;
+    severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+    is_resolved: boolean;
+  }>) => {
+    return fetchApi(`/inventory-alerts/${id}/`, {
+      method: 'PATCH',
       body: JSON.stringify(data),
     });
   },

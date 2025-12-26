@@ -89,7 +89,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               </div>
               <div>
                 <h1 className="text-xl font-black text-gray-900 tracking-tight leading-none uppercase">FugajiSmart</h1>
-                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1">Poultry Hub</p>
+                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mt-1">{t('sidebar.poultry_hub')}</p>
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           {/* Navigation Links */}
           <nav className="flex-1 overflow-y-auto px-4 py-2 custom-scrollbar">
             <div className="space-y-1">
-              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4 mb-4">Core Analytics</p>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-4 mb-4">{t('sidebar.core_analytics')}</p>
               {links.map((link) => {
                 const Icon = link.icon;
                 const isActive = location.pathname === link.to;
@@ -128,10 +128,10 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <div className="mt-8 px-2">
               <div className="p-6 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-3xl text-white relative overflow-hidden group shadow-xl shadow-blue-200">
                 <div className="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-                <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-2">Upgrade Pulse</p>
-                <p className="text-sm font-bold leading-snug mb-4">Unlock advanced growth analytics today.</p>
+                <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-2">{t('sidebar.upgrade_pulse')}</p>
+                <p className="text-sm font-bold leading-snug mb-4">{t('sidebar.upgrade_desc')}</p>
                 <Link to="/farmer/subscription" className="inline-flex items-center gap-2 px-4 py-2 bg-white text-blue-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 transition-colors">
-                  View Plans
+                  {t('sidebar.view_plans')}
                   <TrendingUp className="w-3 h-3" />
                 </Link>
               </div>

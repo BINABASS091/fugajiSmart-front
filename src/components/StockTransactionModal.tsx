@@ -22,13 +22,14 @@ interface StockTransactionModalProps {
 }
 
 interface TransactionData {
-  transaction_type: 'IN' | 'OUT' | 'ADJUSTMENT';
+  transaction_type: 'PURCHASE' | 'USAGE' | 'ADJUSTMENT' | 'RETURN' | 'WASTE';
   quantity: number;
   unit_cost: number;
   reference_number: string;
   supplier: string;
   reason: string;
   notes: string;
+  batch?: string | null;
 }
 
 const StockTransactionModal: React.FC<StockTransactionModalProps> = ({

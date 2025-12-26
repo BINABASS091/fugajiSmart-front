@@ -1,0 +1,785 @@
+{
+  "categories": [
+    {
+      "id": "LIVE_BIRDS",
+      "name": "Live Bird Inventory",
+      "name_sw": "Akiba ya Kuku Hai",
+      "icon": "Bird",
+      "color": "bg-red-50 text-red-600 border-red-100",
+      "subcategories": [
+        {
+          "id": "DAY_OLD_CHICKS",
+          "name": "Day-Old Chicks (DOC)",
+          "name_sw": "Vifaranga wa Siku Moja",
+          "unit": "pcs",
+          "track_mortality": true,
+          "track_age": true
+        },
+        {
+          "id": "GROWER_BIRDS",
+          "name": "Grower Birds",
+          "name_sw": "Kuku Wakua",
+          "unit": "pcs",
+          "track_mortality": true,
+          "track_age": true
+        },
+        {
+          "id": "BROILERS",
+          "name": "Broilers",
+          "name_sw": "Broiler",
+          "unit": "pcs",
+          "track_mortality": true,
+          "track_weight": true
+        },
+        {
+          "id": "LAYERS",
+          "name": "Layers",
+          "name_sw": "Layers",
+          "unit": "pcs",
+          "track_mortality": true,
+          "track_egg_production": true
+        },
+        {
+          "id": "BREEDERS",
+          "name": "Breeders",
+          "name_sw": "Wazazi",
+          "unit": "pcs",
+          "track_mortality": true,
+          "track_fertility": true
+        },
+        {
+          "id": "PULLETS",
+          "name": "Pullets",
+          "name_sw": "Pullets",
+          "unit": "pcs",
+          "track_mortality": true
+        },
+        {
+          "id": "COCKERELS",
+          "name": "Cockerels",
+          "name_sw": "Jogoo",
+          "unit": "pcs",
+          "track_mortality": true
+        },
+        {
+          "id": "PARENT_STOCK",
+          "name": "Parent Stock",
+          "name_sw": "Mfugo wa Wazazi",
+          "unit": "pcs",
+          "track_mortality": true,
+          "track_fertility": true
+        },
+        {
+          "id": "REPLACEMENT_STOCK",
+          "name": "Replacement Stock",
+          "name_sw": "Mfugo wa Ubadilishaji",
+          "unit": "pcs",
+          "track_mortality": true
+        },
+        {
+          "id": "SICK_BIRDS",
+          "name": "Sick Birds (Quarantine)",
+          "name_sw": "Kuku Wagonjwa (Quarantine)",
+          "unit": "pcs",
+          "track_mortality": true,
+          "is_quarantine": true
+        },
+        {
+          "id": "DEAD_BIRDS",
+          "name": "Dead Birds (Mortality Records)",
+          "name_sw": "Kuku Wafu (Rekodi za Vifo)",
+          "unit": "pcs",
+          "is_record_only": true
+        }
+      ]
+    },
+    {
+      "id": "FEED",
+      "name": "Feed Inventory",
+      "name_sw": "Akiba ya Chakula",
+      "icon": "Package",
+      "color": "bg-emerald-50 text-emerald-600 border-emerald-100",
+      "subcategories": [
+        {
+          "id": "COMPLETE_FEEDS",
+          "name": "Complete Feeds",
+          "name_sw": "Chakula Kamili",
+          "unit": "kg",
+          "track_expiry": true,
+          "track_consumption": true,
+          "items": [
+            { "name": "Pre-starter feed", "name_sw": "Chakula cha Awali" },
+            { "name": "Starter feed", "name_sw": "Chakula cha Kuanza" },
+            { "name": "Grower feed", "name_sw": "Chakula cha Kukua" },
+            { "name": "Finisher feed", "name_sw": "Chakula cha Mwisho" },
+            { "name": "Layer mash", "name_sw": "Chakula cha Layers" },
+            { "name": "Breeder feed", "name_sw": "Chakula cha Wazazi" },
+            { "name": "Organic feed", "name_sw": "Chakula cha Asili" },
+            { "name": "Medicated feed", "name_sw": "Chakula chenye Dawa" }
+          ]
+        },
+        {
+          "id": "FEED_INGREDIENTS",
+          "name": "Feed Ingredients (Raw Materials)",
+          "name_sw": "Viungo vya Chakula",
+          "unit": "kg",
+          "track_expiry": true,
+          "items": [
+            { "name": "Maize / Corn", "name_sw": "Mahindi" },
+            { "name": "Crushed maize", "name_sw": "Mahindi yaliyopondwa" },
+            { "name": "Soybean meal", "name_sw": "Unga wa Soya" },
+            { "name": "Fish meal", "name_sw": "Unga wa Samaki" },
+            { "name": "Sunflower cake", "name_sw": "Keki ya Alizeti" },
+            { "name": "Cottonseed cake", "name_sw": "Keki ya Pamba" },
+            { "name": "Wheat bran", "name_sw": "Makapi ya Ngano" },
+            { "name": "Rice bran", "name_sw": "Makapi ya Mchele" },
+            { "name": "Sorghum", "name_sw": "Mtama" },
+            { "name": "Millet", "name_sw": "Uwele" },
+            { "name": "Palm kernel cake", "name_sw": "Keki ya Korosho" },
+            { "name": "Limestone", "name_sw": "Chokaa" },
+            { "name": "Bone meal", "name_sw": "Unga wa Mfupa" },
+            { "name": "DCP (Di-Calcium Phosphate)", "name_sw": "DCP" },
+            { "name": "Salt", "name_sw": "Chumvi" },
+            { "name": "Feed enzymes", "name_sw": "Enzymes za Chakula" },
+            { "name": "Vitamin & mineral premix", "name_sw": "Mchanganyiko wa Vitamini na Madini" },
+            { "name": "Premix (vitamins & minerals)", "name_sw": "Premix (Vitamini na Madini)" }
+          ]
+        },
+        {
+          "id": "FEED_SUPPLEMENTS",
+          "name": "Feed Supplements",
+          "name_sw": "Viongezi vya Chakula",
+          "unit": "kg",
+          "track_expiry": true,
+          "items": [
+            { "name": "Amino acids", "name_sw": "Amino Asidi" },
+            { "name": "Probiotics", "name_sw": "Probiotics" },
+            { "name": "Enzymes", "name_sw": "Enzymes" },
+            { "name": "Electrolytes", "name_sw": "Electrolytes" },
+            { "name": "Growth promoters", "name_sw": "Viongeza Ukuaji" },
+            { "name": "Mycotoxin binders", "name_sw": "Vifunga Mycotoxin" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "MEDICINE",
+      "name": "Medicine & Veterinary Inventory",
+      "name_sw": "Akiba ya Dawa na Matibabu",
+      "icon": "Pill",
+      "color": "bg-blue-50 text-blue-600 border-blue-100",
+      "subcategories": [
+        {
+          "id": "VACCINES",
+          "name": "Vaccines",
+          "name_sw": "Chanjo",
+          "unit": "doses",
+          "track_expiry": true,
+          "track_course_days": true,
+          "requires_refrigeration": true,
+          "items": [
+            { "name": "Newcastle Disease (ND)", "name_sw": "Chanjo ya Newcastle" },
+            { "name": "Gumboro (IBD)", "name_sw": "Chanjo ya Gumboro" },
+            { "name": "Fowl Pox", "name_sw": "Chanjo ya Fowl Pox" },
+            { "name": "Marek's", "name_sw": "Chanjo ya Marek" },
+            { "name": "Infectious Bronchitis (IB)", "name_sw": "Chanjo ya Bronchitis" },
+            { "name": "Avian Influenza", "name_sw": "Chanjo ya Avian Influenza" },
+            { "name": "Coryza", "name_sw": "Chanjo ya Coryza" },
+            { "name": "Fowl Cholera", "name_sw": "Chanjo ya Fowl Cholera" }
+          ]
+        },
+        {
+          "id": "DRUGS_TREATMENTS",
+          "name": "Drugs & Treatments",
+          "name_sw": "Dawa na Matibabu",
+          "unit": "ml",
+          "track_expiry": true,
+          "track_course_days": true,
+          "items": [
+            { "name": "Antibiotics", "name_sw": "Antibiotiki" },
+            { "name": "Anticoccidials", "name_sw": "Dawa za Coccidiosis" },
+            { "name": "Dewormers", "name_sw": "Dawa za Minyoo" },
+            { "name": "Anti-stress drugs", "name_sw": "Dawa za Kupunguza Msongo" },
+            { "name": "Anti-diarrheal drugs", "name_sw": "Dawa za Kukomesha Kiharusi" },
+            { "name": "Anti-fungals", "name_sw": "Dawa za Kuvu" },
+            { "name": "Pain & fever reducers", "name_sw": "Dawa za Maumivu na Homa" }
+          ]
+        },
+        {
+          "id": "DISINFECTANTS",
+          "name": "Disinfectants",
+          "name_sw": "Dawa za Kuua Vimelea",
+          "unit": "liters",
+          "track_expiry": true,
+          "items": [
+            { "name": "Iodine", "name_sw": "Iodine" },
+            { "name": "Formalin", "name_sw": "Formalin" },
+            { "name": "Virkon", "name_sw": "Virkon" },
+            { "name": "Bleach", "name_sw": "Bleach" },
+            { "name": "Phenol", "name_sw": "Phenol" },
+            { "name": "Alcohol", "name_sw": "Pombe" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SUPPLEMENTS",
+      "name": "Supplements & Additives",
+      "name_sw": "Viongezi na Viongeza",
+      "icon": "Droplet",
+      "color": "bg-purple-50 text-purple-600 border-purple-100",
+      "subcategories": [
+        {
+          "id": "SUPPLEMENTS",
+          "name": "Supplements",
+          "name_sw": "Viongezi",
+          "unit": "ml",
+          "track_expiry": true,
+          "items": [
+            { "name": "Multivitamins", "name_sw": "Vitamini Nyingi" },
+            { "name": "Electrolytes", "name_sw": "Electrolytes" },
+            { "name": "Probiotics", "name_sw": "Probiotics" },
+            { "name": "Amino acids", "name_sw": "Amino Asidi" },
+            { "name": "Growth promoters", "name_sw": "Viongeza Ukuaji" },
+            { "name": "Immunity boosters", "name_sw": "Viongeza Kinga" },
+            { "name": "Liver tonics", "name_sw": "Dawa za Ini" },
+            { "name": "Calcium supplements", "name_sw": "Viongeza za Kalisi" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EGGS",
+      "name": "Egg Production Inventory",
+      "name_sw": "Akiba ya Mayai",
+      "icon": "Egg",
+      "color": "bg-yellow-50 text-yellow-600 border-yellow-100",
+      "subcategories": [
+        {
+          "id": "EGG_TYPES",
+          "name": "Egg Types",
+          "name_sw": "Aina za Mayai",
+          "unit": "pcs",
+          "track_expiry": true,
+          "items": [
+            { "name": "Table eggs", "name_sw": "Mayai ya Meza" },
+            { "name": "Fertile eggs", "name_sw": "Mayai ya Kustawi" },
+            { "name": "Cracked eggs", "name_sw": "Mayai yaliyovunjika" },
+            { "name": "Broken eggs", "name_sw": "Mayai yaliyopasuka" },
+            { "name": "Dirty eggs", "name_sw": "Mayai yaliyochafuliwa" },
+            { "name": "Rejected eggs", "name_sw": "Mayai yaliyokataliwa" }
+          ]
+        },
+        {
+          "id": "EGG_PACKAGING",
+          "name": "Egg Packaging",
+          "name_sw": "Vifungo vya Mayai",
+          "unit": "pcs",
+          "items": [
+            { "name": "Egg trays", "name_sw": "Trays za Mayai" },
+            { "name": "Egg cartons", "name_sw": "Cartons za Mayai" },
+            { "name": "Egg crates", "name_sw": "Masanduku ya Mayai" },
+            { "name": "Egg stamps / labels", "name_sw": "Alama za Mayai" },
+            { "name": "Egg grading trays", "name_sw": "Trays za Kupanga Mayai" },
+            { "name": "Egg weighing scale", "name_sw": "Mizani ya Mayai" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EQUIPMENT",
+      "name": "Housing & Farm Equipment",
+      "name_sw": "Vifaa vya Nyumba na Shamba",
+      "icon": "Wrench",
+      "color": "bg-amber-50 text-amber-600 border-amber-100",
+      "subcategories": [
+        {
+          "id": "POULTRY_HOUSE_EQUIPMENT",
+          "name": "Poultry House Equipment",
+          "name_sw": "Vifaa vya Nyumba ya Kuku",
+          "unit": "pcs",
+          "items": [
+            { "name": "Poultry houses", "name_sw": "Nyumba za Kuku" },
+            { "name": "Feeders (manual/automatic)", "name_sw": "Vifaa vya Chakula" },
+            { "name": "Drinkers (bell/nipple)", "name_sw": "Vifaa vya Maji" },
+            { "name": "Water tanks", "name_sw": "Mabakuli ya Maji" },
+            { "name": "Brooders", "name_sw": "Vifaa vya Joto" },
+            { "name": "Infrared bulbs", "name_sw": "Balbu za Infrared" },
+            { "name": "Gas brooders", "name_sw": "Vifaa vya Joto vya Geshi" },
+            { "name": "Heating lamps", "name_sw": "Taa za Joto" },
+            { "name": "Egg trays", "name_sw": "Trays za Mayai" },
+            { "name": "Egg crates", "name_sw": "Masanduku ya Mayai" },
+            { "name": "Perches", "name_sw": "Mabao ya Kukaa" },
+            { "name": "Nest boxes", "name_sw": "Masanduku ya Kuketi" },
+            { "name": "Curtains", "name_sw": "Mapazia" },
+            { "name": "Ventilation fans", "name_sw": "Feni za Upepo" },
+            { "name": "Exhaust fans", "name_sw": "Feni za Kutolea Nje" },
+            { "name": "Foggers", "name_sw": "Vifaa vya Kufukiza" },
+            { "name": "Cooling pads", "name_sw": "Pad za Kupoza" },
+            { "name": "Thermometers", "name_sw": "Vipima Joto" },
+            { "name": "Hygrometers", "name_sw": "Vipima Unyevu" }
+          ]
+        },
+        {
+          "id": "IOT_DEVICES",
+          "name": "IoT & Smart Devices (FugajiSmart Core)",
+          "name_sw": "Vifaa vya IoT na Smart",
+          "unit": "pcs",
+          "is_iot": true,
+          "items": [
+            { "name": "Temperature sensors", "name_sw": "Vichunguzi vya Joto" },
+            { "name": "Humidity sensors", "name_sw": "Vichunguzi vya Unyevu" },
+            { "name": "Ammonia sensors", "name_sw": "Vichunguzi vya Amonia" },
+            { "name": "Water flow sensors", "name_sw": "Vichunguzi vya Mzunguko wa Maji" },
+            { "name": "Feed level sensors", "name_sw": "Vichunguzi vya Kiwango cha Chakula" },
+            { "name": "Smart cameras", "name_sw": "Kamera za Smart" },
+            { "name": "Data gateways", "name_sw": "Njia za Data" },
+            { "name": "Power backup (UPS / solar)", "name_sw": "Nguvu ya Ziada" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SANITATION",
+      "name": "Farm Sanitation & Biosecurity",
+      "name_sw": "Usafi na Usalama wa Shamba",
+      "icon": "Shield",
+      "color": "bg-teal-50 text-teal-600 border-teal-100",
+      "subcategories": [
+        {
+          "id": "BIOSECURITY",
+          "name": "Biosecurity Items",
+          "name_sw": "Vifaa vya Usalama",
+          "unit": "pcs",
+          "items": [
+            { "name": "Footbaths", "name_sw": "Mabakuli ya Miguu" },
+            { "name": "Hand sanitizers", "name_sw": "Dawa za Mikono" },
+            { "name": "Gloves", "name_sw": "Gloves" },
+            { "name": "Boots", "name_sw": "Viatu vya Shamba" },
+            { "name": "Overalls", "name_sw": "Mavazi ya Kazi" },
+            { "name": "Masks", "name_sw": "Masks" }
+          ]
+        },
+        {
+          "id": "SANITATION_TOOLS",
+          "name": "Sanitation Tools",
+          "name_sw": "Zana za Usafi",
+          "unit": "pcs",
+          "items": [
+            { "name": "Sprayers", "name_sw": "Vifaa vya Kufukiza" },
+            { "name": "Rodent traps", "name_sw": "Mtego wa Panya" },
+            { "name": "Fly traps", "name_sw": "Mtego wa Nzi" },
+            { "name": "Insecticides", "name_sw": "Dawa za Wadudu", "unit": "liters" }
+          ]
+        },
+        {
+          "id": "VETERINARY_TOOLS",
+          "name": "Veterinary Tools",
+          "name_sw": "Zana za Matibabu",
+          "unit": "pcs",
+          "items": [
+            { "name": "Syringes", "name_sw": "Syringes" },
+            { "name": "Needles", "name_sw": "Sindano" },
+            { "name": "Vaccination guns", "name_sw": "Bunduki za Chanjo" },
+            { "name": "Thermometers", "name_sw": "Vipima Joto" },
+            { "name": "Weighing scales", "name_sw": "Mizani" },
+            { "name": "Protective gloves", "name_sw": "Gloves za Kinga" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "UTILITIES",
+      "name": "Utilities & Consumables",
+      "name_sw": "Matumizi na Vifaa",
+      "icon": "Zap",
+      "color": "bg-orange-50 text-orange-600 border-orange-100",
+      "subcategories": [
+        {
+          "id": "UTILITIES",
+          "name": "Utilities",
+          "name_sw": "Matumizi",
+          "unit": "units",
+          "items": [
+            { "name": "Electricity units", "name_sw": "Vitengo vya Umeme", "unit": "kWh" },
+            { "name": "Fuel (diesel/petrol)", "name_sw": "Mafuta", "unit": "liters" },
+            { "name": "Diesel", "name_sw": "Diesel", "unit": "liters" },
+            { "name": "Petrol", "name_sw": "Petroli", "unit": "liters" },
+            { "name": "Gas cylinders", "name_sw": "Silinda za Geshi", "unit": "pcs" },
+            { "name": "Gas", "name_sw": "Geshi", "unit": "kg" },
+            { "name": "Generator oil", "name_sw": "Mafuta ya Jenereta", "unit": "liters" },
+            { "name": "Backup batteries", "name_sw": "Betri za Ziada", "unit": "pcs" }
+          ]
+        },
+        {
+          "id": "CONSUMABLES",
+          "name": "Consumables",
+          "name_sw": "Vifaa vya Matumizi",
+          "unit": "pcs",
+          "items": [
+            { "name": "Extension cables", "name_sw": "Nyaya za Ugani" },
+            { "name": "Batteries", "name_sw": "Betri" },
+            { "name": "Bulbs", "name_sw": "Balbu" },
+            { "name": "Solar panels", "name_sw": "Paneli za Jua" },
+            { "name": "Water pipes", "name_sw": "Mabomba ya Maji" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "STORAGE",
+      "name": "Storage & Packaging",
+      "name_sw": "Uhifadhi na Vifungo",
+      "icon": "Box",
+      "color": "bg-gray-50 text-gray-600 border-gray-100",
+      "subcategories": [
+        {
+          "id": "PACKAGING",
+          "name": "Packaging Materials",
+          "name_sw": "Vifungo",
+          "unit": "pcs",
+          "items": [
+            { "name": "Feed bags", "name_sw": "Mifuko ya Chakula" },
+            { "name": "Plastic containers", "name_sw": "Chombo cha Plastiki" },
+            { "name": "Storage bins", "name_sw": "Masanduku ya Hifadhi" },
+            { "name": "Silos", "name_sw": "Silos" },
+            { "name": "Pallets", "name_sw": "Pallets" }
+          ]
+        },
+        {
+          "id": "STORAGE_EQUIPMENT",
+          "name": "Storage Equipment",
+          "name_sw": "Vifaa vya Hifadhi",
+          "unit": "pcs",
+          "items": [
+            { "name": "Cold storage", "name_sw": "Hifadhi ya Baridi" },
+            { "name": "Freezers", "name_sw": "Freeza" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "TRANSPORT",
+      "name": "Transport & Logistics",
+      "name_sw": "Usafiri na Uwasilishaji",
+      "icon": "Truck",
+      "color": "bg-indigo-50 text-indigo-600 border-indigo-100",
+      "subcategories": [
+        {
+          "id": "TRANSPORT_EQUIPMENT",
+          "name": "Transport Equipment",
+          "name_sw": "Vifaa vya Usafiri",
+          "unit": "pcs",
+          "items": [
+            { "name": "Poultry crates", "name_sw": "Masanduku ya Kuku" },
+            { "name": "Delivery crates", "name_sw": "Masanduku ya Uwasilishaji" },
+            { "name": "Transport cages", "name_sw": "Tundu za Usafiri" },
+            { "name": "Egg transport trays", "name_sw": "Trays za Usafiri wa Mayai" },
+            { "name": "Delivery vehicle", "name_sw": "Gari la Uwasilishaji" },
+            { "name": "Vehicles", "name_sw": "Magari" },
+            { "name": "Motorcycles", "name_sw": "Pikipiki" },
+            { "name": "Cold boxes", "name_sw": "Masanduku ya Baridi" },
+            { "name": "GPS trackers", "name_sw": "Vichunguzi vya GPS" }
+          ]
+        },
+        {
+          "id": "TRANSPORT_CONSUMABLES",
+          "name": "Transport Consumables",
+          "name_sw": "Vifaa vya Usafiri",
+          "unit": "liters",
+          "items": [
+            { "name": "Fuel records", "name_sw": "Rekodi za Mafuta", "unit": "records" },
+            { "name": "Maintenance parts", "name_sw": "Sehemu za Matengenezo", "unit": "pcs" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "LABOR",
+      "name": "Labor & Operational Items",
+      "name_sw": "Wafanyakazi na Vifaa",
+      "icon": "Users",
+      "color": "bg-pink-50 text-pink-600 border-pink-100",
+      "subcategories": [
+        {
+          "id": "LABOR_EQUIPMENT",
+          "name": "Labor Equipment",
+          "name_sw": "Vifaa vya Wafanyakazi",
+          "unit": "pcs",
+          "items": [
+            { "name": "Staff uniforms", "name_sw": "Mavazi ya Wafanyakazi" },
+            { "name": "Gloves", "name_sw": "Gloves" },
+            { "name": "Boots", "name_sw": "Viatu vya Kazi" },
+            { "name": "Cleaning tools", "name_sw": "Zana za Usafi" },
+            { "name": "Farm tools (shovels, buckets)", "name_sw": "Zana za Shamba" },
+            { "name": "Weighing scales", "name_sw": "Mizani" },
+            { "name": "Record books (if manual backup)", "name_sw": "Vitabu vya Rekodi" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SALES",
+      "name": "Sales & Business Inventory",
+      "name_sw": "Akiba ya Mauzo na Biashara",
+      "icon": "DollarSign",
+      "color": "bg-green-50 text-green-600 border-green-100",
+      "subcategories": [
+        {
+          "id": "BUSINESS_MATERIALS",
+          "name": "Business Materials",
+          "name_sw": "Vifaa vya Biashara",
+          "unit": "pcs",
+          "items": [
+            { "name": "Invoices", "name_sw": "Invoices", "unit": "records" },
+            { "name": "Receipts", "name_sw": "Risiti", "unit": "records" },
+            { "name": "POS materials", "name_sw": "Vifaa vya POS" },
+            { "name": "Customer records", "name_sw": "Rekodi za Wateja", "unit": "records" },
+            { "name": "Contracts", "name_sw": "Mikataba", "unit": "records" },
+            { "name": "Price lists", "name_sw": "Orodha ya Bei", "unit": "records" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WATER",
+      "name": "Water & Drinking System",
+      "name_sw": "Maji na Mfumo wa Kunywa",
+      "icon": "Droplet",
+      "color": "bg-cyan-50 text-cyan-600 border-cyan-100",
+      "subcategories": [
+        {
+          "id": "WATER_EQUIPMENT",
+          "name": "Water Equipment",
+          "name_sw": "Vifaa vya Maji",
+          "unit": "pcs",
+          "items": [
+            { "name": "Water tanks", "name_sw": "Mabakuli ya Maji" },
+            { "name": "Water pipes", "name_sw": "Mabomba ya Maji" },
+            { "name": "Nipple drinkers", "name_sw": "Vifaa vya Kunywa vya Nipple" },
+            { "name": "Bell drinkers", "name_sw": "Vifaa vya Kunywa vya Bell" },
+            { "name": "Water filters", "name_sw": "Vichujio vya Maji" },
+            { "name": "Water meters", "name_sw": "Vipima Maji" }
+          ]
+        },
+        {
+          "id": "WATER_TREATMENT",
+          "name": "Water Treatment",
+          "name_sw": "Matibabu ya Maji",
+          "unit": "liters",
+          "track_expiry": true,
+          "items": [
+            { "name": "Chlorine", "name_sw": "Chlorine" },
+            { "name": "Water sanitizers", "name_sw": "Dawa za Kusafisha Maji" },
+            { "name": "Electrolyte solutions", "name_sw": "Suluhisho za Electrolyte" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "HATCHERY",
+      "name": "Hatchery Inventory",
+      "name_sw": "Akiba ya Hatchery",
+      "icon": "Egg",
+      "color": "bg-yellow-50 text-yellow-600 border-yellow-100",
+      "subcategories": [
+        {
+          "id": "HATCHERY_EQUIPMENT",
+          "name": "Hatchery Equipment",
+          "name_sw": "Vifaa vya Hatchery",
+          "unit": "pcs",
+          "items": [
+            { "name": "Incubators", "name_sw": "Incubators" },
+            { "name": "Hatchers", "name_sw": "Hatchers" },
+            { "name": "Egg setters", "name_sw": "Vifaa vya Kuweka Mayai" },
+            { "name": "Candling lamps", "name_sw": "Taa za Candling" },
+            { "name": "Chick boxes", "name_sw": "Masanduku ya Vifaranga" },
+            { "name": "Hatch baskets", "name_sw": "Vikapu vya Hatchery" }
+          ]
+        },
+        {
+          "id": "HATCHERY_SENSORS",
+          "name": "Hatchery Sensors",
+          "name_sw": "Vichunguzi vya Hatchery",
+          "unit": "pcs",
+          "is_iot": true,
+          "items": [
+            { "name": "Temperature sensors", "name_sw": "Vichunguzi vya Joto" },
+            { "name": "Humidity sensors", "name_sw": "Vichunguzi vya Unyevu" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "WASTE",
+      "name": "Waste & By-Products",
+      "name_sw": "Taka na Bidhaa za Ziada",
+      "icon": "Trash2",
+      "color": "bg-gray-50 text-gray-600 border-gray-100",
+      "subcategories": [
+        {
+          "id": "WASTE_PRODUCTS",
+          "name": "Waste Products",
+          "name_sw": "Bidhaa za Taka",
+          "unit": "kg",
+          "items": [
+            { "name": "Poultry manure", "name_sw": "Mboji ya Kuku" },
+            { "name": "Litter (wood shavings, rice husk)", "name_sw": "Litter (Makapi ya Mbao, Makapi ya Mchele)" },
+            { "name": "Used litter", "name_sw": "Litter Iliyotumika" },
+            { "name": "Feathers", "name_sw": "Manyoya" },
+            { "name": "Broken eggs", "name_sw": "Mayai yaliyovunjika" },
+            { "name": "Dead birds disposal bags", "name_sw": "Mifuko ya Kutupa Kuku Wafu" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "MACHINERY",
+      "name": "Machinery & Tools",
+      "name_sw": "Mashine na Zana",
+      "icon": "Cog",
+      "color": "bg-slate-50 text-slate-600 border-slate-100",
+      "subcategories": [
+        {
+          "id": "FARM_MACHINERY",
+          "name": "Farm Machinery",
+          "name_sw": "Mashine za Shamba",
+          "unit": "pcs",
+          "items": [
+            { "name": "Feed mixers", "name_sw": "Vichanganyaji vya Chakula" },
+            { "name": "Feed grinders", "name_sw": "Vikusanyaji vya Chakula" },
+            { "name": "Generators", "name_sw": "Jenereta" },
+            { "name": "Solar systems", "name_sw": "Mifumo ya Jua" },
+            { "name": "Power cables", "name_sw": "Nyaya za Umeme" },
+            { "name": "Water pumps", "name_sw": "Mipampu ya Maji" }
+          ]
+        },
+        {
+          "id": "FARM_TOOLS",
+          "name": "Farm Tools",
+          "name_sw": "Zana za Shamba",
+          "unit": "pcs",
+          "items": [
+            { "name": "Wheelbarrows", "name_sw": "Mikokoteni" },
+            { "name": "Shovels", "name_sw": "Fyekeo" },
+            { "name": "Brooms", "name_sw": "Mifagio" },
+            { "name": "Buckets", "name_sw": "Ndoo" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "OFFICE",
+      "name": "Office & Digital Inventory",
+      "name_sw": "Akiba ya Ofisi na Digital",
+      "icon": "Monitor",
+      "color": "bg-blue-50 text-blue-600 border-blue-100",
+      "subcategories": [
+        {
+          "id": "DIGITAL_EQUIPMENT",
+          "name": "Digital Equipment",
+          "name_sw": "Vifaa vya Digital",
+          "unit": "pcs",
+          "items": [
+            { "name": "Computers", "name_sw": "Kompyuta" },
+            { "name": "Tablets", "name_sw": "Tablets" },
+            { "name": "Mobile phones", "name_sw": "Simu za Mkononi" },
+            { "name": "Internet router", "name_sw": "Router ya Internet" },
+            { "name": "Printers", "name_sw": "Printers" },
+            { "name": "POS devices", "name_sw": "Vifaa vya POS" }
+          ]
+        },
+        {
+          "id": "OFFICE_SUPPLIES",
+          "name": "Office Supplies",
+          "name_sw": "Vifaa vya Ofisi",
+          "unit": "pcs",
+          "items": [
+            { "name": "Receipt books", "name_sw": "Vitabu vya Risiti" },
+            { "name": "Stationery", "name_sw": "Vifaa vya Ofisi" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "FINANCIAL",
+      "name": "Financial & Records Inventory",
+      "name_sw": "Akiba ya Fedha na Rekodi",
+      "icon": "FileText",
+      "color": "bg-emerald-50 text-emerald-600 border-emerald-100",
+      "subcategories": [
+        {
+          "id": "FINANCIAL_RECORDS",
+          "name": "Financial Records",
+          "name_sw": "Rekodi za Fedha",
+          "unit": "records",
+          "items": [
+            { "name": "Purchase invoices", "name_sw": "Invoices za Ununuzi" },
+            { "name": "Sales records", "name_sw": "Rekodi za Mauzo" },
+            { "name": "Feed consumption logs", "name_sw": "Rekodi za Matumizi ya Chakula" },
+            { "name": "Medication logs", "name_sw": "Rekodi za Matumizi ya Dawa" },
+            { "name": "Mortality reports", "name_sw": "Ripoti za Vifo" },
+            { "name": "Production reports", "name_sw": "Ripoti za Uzalishaji" },
+            { "name": "Profit & loss data", "name_sw": "Data ya Faida na Hasara" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "EMERGENCY",
+      "name": "Disease & Emergency Stock",
+      "name_sw": "Akiba ya Dharura na Magonjwa",
+      "icon": "AlertTriangle",
+      "color": "bg-rose-50 text-rose-600 border-rose-100",
+      "subcategories": [
+        {
+          "id": "EMERGENCY_STOCK",
+          "name": "Emergency Stock",
+          "name_sw": "Akiba ya Dharura",
+          "unit": "pcs",
+          "is_emergency": true,
+          "items": [
+            { "name": "Emergency drugs", "name_sw": "Dawa za Dharura" },
+            { "name": "Quarantine equipment", "name_sw": "Vifaa vya Quarantine" },
+            { "name": "Isolation cages", "name_sw": "Tundu za Kutengwa" },
+            { "name": "Disposal bags", "name_sw": "Mifuko ya Kutupa" },
+            { "name": "Incineration tools", "name_sw": "Zana za Kuchoma" },
+            { "name": "Fire extinguishers", "name_sw": "Vifaa vya Kuzima Moto" },
+            { "name": "First aid kit", "name_sw": "Sanduku la First Aid" },
+            { "name": "Backup water tanks", "name_sw": "Mabakuli ya Maji ya Ziada" },
+            { "name": "Backup feed stock", "name_sw": "Akiba ya Chakula ya Ziada" },
+            { "name": "Power backup systems", "name_sw": "Mifumo ya Nguvu ya Ziada" }
+          ]
+        }
+      ]
+    }
+  ],
+  "units": {
+    "pcs": { "name": "Pieces", "name_sw": "Vipande" },
+    "kg": { "name": "Kilograms", "name_sw": "Kilogramu" },
+    "g": { "name": "Grams", "name_sw": "Gramu" },
+    "liters": { "name": "Liters", "name_sw": "Lita" },
+    "ml": { "name": "Milliliters", "name_sw": "Mililita" },
+    "bags": { "name": "Bags", "name_sw": "Mifuko" },
+    "doses": { "name": "Doses", "name_sw": "Doses" },
+    "units": { "name": "Units", "name_sw": "Vitengo" },
+    "kWh": { "name": "Kilowatt Hours", "name_sw": "Kilowatt Saa" },
+    "records": { "name": "Records", "name_sw": "Rekodi" },
+    "cylinders": { "name": "Cylinders", "name_sw": "Silinda" }
+  },
+  "tracking_features": {
+    "track_expiry": "Track expiry dates for perishable items",
+    "track_mortality": "Track mortality for live birds",
+    "track_consumption": "Track consumption rates",
+    "track_age": "Track age of birds",
+    "track_weight": "Track weight of birds",
+    "track_egg_production": "Track egg production",
+    "track_fertility": "Track fertility rates",
+    "requires_refrigeration": "Requires cold storage",
+    "is_iot": "IoT/Smart device",
+    "is_emergency": "Emergency stock item",
+    "is_quarantine": "Quarantine item",
+    "is_record_only": "Record only (no physical stock)"
+  }
+}
+
