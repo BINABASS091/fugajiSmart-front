@@ -3,9 +3,20 @@ import { Card } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import { inventoryApi } from '../lib/api';
+import {
+  inventoryApi,
+  medicineApi,
+  equipmentApi,
+  laborApi,
+  healthAlertsApi,
+  eggsApi
+} from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
-import { X, Package, Tag, Hash, DollarSign, AlertTriangle, Calendar, User, Pill, Wrench, Box, ChevronRight } from 'lucide-react';
+import {
+  X, Package, Tag, Hash, DollarSign, AlertTriangle,
+  Calendar, User, Pill, Wrench, Box, ChevronRight,
+  Egg, HeartPulse
+} from 'lucide-react';
 
 interface InventoryItem {
   id?: string;
@@ -32,6 +43,39 @@ interface InventoryItem {
   age_days?: number | null;
   average_weight?: number | null;
   notes?: string | null;
+
+  // Medicine Fields
+  medicine_type?: string;
+  active_ingredient?: string;
+  administration_method?: string;
+  withdrawal_period_days?: number;
+
+  // Equipment Fields
+  equipment_type?: string;
+  condition?: string;
+  expected_lifespan_years?: number;
+  next_maintenance_date?: string | null;
+
+  // Labor Fields
+  worker_name?: string;
+  worker_type?: string;
+  role?: string;
+  payment_frequency?: string;
+  wage_amount?: number;
+
+  // Egg Fields
+  batch_name?: string;
+  grade?: string;
+  quality?: string;
+  quantity_trays?: number;
+  quantity_pieces?: number;
+  price_per_tray?: number;
+
+  // Health Fields
+  alert_type?: string;
+  severity?: string;
+  symptoms?: string;
+  count_affected?: number;
 }
 
 interface AddInventoryItemModalProps {
@@ -73,6 +117,7 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
     units: { value: string; label: string }[];
     placeholder: string;
     showExpiry: boolean;
+    api: any;
   }> = {
     FEED: {
       label: 'Feed',
@@ -84,21 +129,22 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
         { value: 'g', label: 'Grams (g)' }
       ],
       placeholder: 'e.g., Broiler Starter Feed',
-      showExpiry: true
+      showExpiry: true,
+      api: inventoryApi
     },
     MEDICINE: {
-      label: 'Health',
+      label: 'Medicine',
       icon: <Pill className="w-6 h-6" />,
       color: 'bg-blue-50 text-blue-600 border-blue-100',
       units: [
         { value: 'ml', label: 'Milliliters (ml)' },
         { value: 'l', label: 'Liters (l)' },
         { value: 'bottles', label: 'Bottles' },
-        { value: 'doses', label: 'Doses' },
-        { value: 'tablets', label: 'Tablets' }
+        { value: 'doses', label: 'Doses' }
       ],
       placeholder: 'e.g., Newcastle Vaccine',
-      showExpiry: true
+      showExpiry: true,
+      api: medicineApi
     },
     EQUIPMENT: {
       label: 'Tools',
@@ -106,25 +152,59 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
       color: 'bg-amber-50 text-amber-600 border-amber-100',
       units: [
         { value: 'pcs', label: 'Pieces (pcs)' },
-        { value: 'sets', label: 'Sets' },
-        { value: 'boxes', label: 'Boxes' }
+        { value: 'sets', label: 'Sets' }
       ],
       placeholder: 'e.g., Automatic Drinker',
-      showExpiry: false
+      showExpiry: false,
+      api: equipmentApi
     },
-    OTHER: {
-      label: 'Others',
-      icon: <Box className="w-6 h-6" />,
+    LABOR: {
+      label: 'Labor',
+      icon: <User className="w-6 h-6" />,
       color: 'bg-indigo-50 text-indigo-600 border-indigo-100',
+      units: [
+        { value: 'man_hours', label: 'Hours' },
+        { value: 'days', label: 'Days' }
+      ],
+      placeholder: 'e.g., Seasonal Worker',
+      showExpiry: false,
+      api: laborApi
+    },
+    EGGS: {
+      label: 'Eggs',
+      icon: <Egg className="w-6 h-6" />,
+      color: 'bg-orange-50 text-orange-600 border-orange-100',
+      units: [
+        { value: 'trays', label: 'Trays' },
+        { value: 'pieces', label: 'Pieces' }
+      ],
+      placeholder: 'e.g., Morning Collection',
+      showExpiry: true,
+      api: eggsApi
+    },
+    HEALTH: {
+      label: 'Health',
+      icon: <HeartPulse className="w-6 h-6" />,
+      color: 'bg-rose-50 text-rose-600 border-rose-100',
+      units: [
+        { value: 'records', label: 'Records' }
+      ],
+      placeholder: 'e.g., Symptom Report',
+      showExpiry: false,
+      api: healthAlertsApi
+    },
+    GENERAL: {
+      label: 'General',
+      icon: <Box className="w-6 h-6" />,
+      color: 'bg-slate-50 text-slate-600 border-slate-100',
       units: [
         { value: 'pcs', label: 'Pieces (pcs)' },
         { value: 'kg', label: 'Kilograms (kg)' },
-        { value: 'bags', label: 'Bags' },
-        { value: 'bottles', label: 'Bottles' },
-        { value: 'boxes', label: 'Boxes' }
+        { value: 'bags', label: 'Bags' }
       ],
       placeholder: 'e.g., Wood Shavings',
-      showExpiry: true
+      showExpiry: true,
+      api: inventoryApi
     }
   };
 
@@ -182,18 +262,29 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
         return;
       }
 
+      const config = CATEGORY_CONFIG[formData.category];
       const payload = { ...formData };
-      if (payload.category && !CATEGORY_CONFIG[payload.category]?.showExpiry) {
+
+      // Remove expiry if not needed
+      if (!config.showExpiry) {
         payload.expiry_date = null;
       }
 
+      let response;
       if (item?.id) {
-        const { error } = await inventoryApi.updateItem(item.id, payload);
-        if (error) throw new Error(error);
+        response = await config.api.update(item.id, payload);
       } else {
-        const { error } = await inventoryApi.createItem(payload);
-        if (error) throw new Error(error);
+        // Use createItem for inventoryApi, create for others
+        if (config.api === inventoryApi && typeof config.api.createItem === 'function') {
+          response = await config.api.createItem(payload);
+        } else if (typeof config.api.create === 'function') {
+          response = await config.api.create(payload);
+        } else {
+          throw new Error('Resource creation is not supported for this category.');
+        }
       }
+
+      if (response.error) throw new Error(response.error);
 
       onSave();
       onClose();
@@ -397,6 +488,134 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
                   />
                 </div>
               </div>
+
+              {/* Specialized Fields based on Category */}
+              {formData.category === 'MEDICINE' && (
+                <div className="sm:col-span-2 space-y-6 pt-6 border-t border-gray-100">
+                  <Label className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">Pharmacological Context</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Medicine Type</Label>
+                      <select
+                        value={formData.medicine_type || ''}
+                        onChange={(e) => handleInputChange('medicine_type', e.target.value)}
+                        className="w-full py-5 px-6 rounded-2xl border-none bg-blue-50/50 text-lg font-bold appearance-none cursor-pointer"
+                      >
+                        <option value="">Select Type...</option>
+                        <option value="VACCINE">Vaccine</option>
+                        <option value="ANTIBIOTIC">Antibiotic</option>
+                        <option value="SUPPLEMENT">Supplement</option>
+                        <option value="DISINFECTANT">Disinfectant</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Withdrawal Period (Days)</Label>
+                      <Input
+                        type="number"
+                        value={formData.withdrawal_period_days || 0}
+                        onChange={(e) => handleInputChange('withdrawal_period_days', parseInt(e.target.value))}
+                        className="py-6 rounded-2xl border-none bg-blue-50/50 font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {formData.category === 'EQUIPMENT' && (
+                <div className="sm:col-span-2 space-y-6 pt-6 border-t border-gray-100">
+                  <Label className="text-[10px] font-black text-amber-600 uppercase tracking-[0.2em]">Asset Attributes</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Equipment Condition</Label>
+                      <select
+                        value={formData.condition || 'GOOD'}
+                        onChange={(e) => handleInputChange('condition', e.target.value)}
+                        className="w-full py-5 px-6 rounded-2xl border-none bg-amber-50/50 text-lg font-bold appearance-none cursor-pointer"
+                      >
+                        <option value="EXCELLENT">Excellent</option>
+                        <option value="GOOD">Good</option>
+                        <option value="FAIR">Fair</option>
+                        <option value="DAMAGED">Damaged</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Lifespan Expectancy (Years)</Label>
+                      <Input
+                        type="number"
+                        value={formData.expected_lifespan_years || 5}
+                        onChange={(e) => handleInputChange('expected_lifespan_years', parseInt(e.target.value))}
+                        className="py-6 rounded-2xl border-none bg-amber-50/50 font-bold"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {formData.category === 'LABOR' && (
+                <div className="sm:col-span-2 space-y-6 pt-6 border-t border-gray-100">
+                  <Label className="text-[10px] font-black text-indigo-600 uppercase tracking-[0.2em]">Personnel Setup</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Contract Type</Label>
+                      <select
+                        value={formData.worker_type || 'PERMANENT'}
+                        onChange={(e) => handleInputChange('worker_type', e.target.value)}
+                        className="w-full py-5 px-6 rounded-2xl border-none bg-indigo-50/50 text-lg font-bold appearance-none cursor-pointer"
+                      >
+                        <option value="PERMANENT">Permanent</option>
+                        <option value="CASUAL">Casual</option>
+                        <option value="CONTRACT">Contract</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Payment Frequency</Label>
+                      <select
+                        value={formData.payment_frequency || 'MONTHLY'}
+                        onChange={(e) => handleInputChange('payment_frequency', e.target.value)}
+                        className="w-full py-5 px-6 rounded-2xl border-none bg-indigo-50/50 text-lg font-bold appearance-none cursor-pointer"
+                      >
+                        <option value="DAILY">Daily</option>
+                        <option value="WEEKLY">Weekly</option>
+                        <option value="MONTHLY">Monthly</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {formData.category === 'EGGS' && (
+                <div className="sm:col-span-2 space-y-6 pt-6 border-t border-gray-100">
+                  <Label className="text-[10px] font-black text-orange-600 uppercase tracking-[0.2em]">Quality Grading</Label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Size Grade</Label>
+                      <select
+                        value={formData.grade || 'MEDIUM'}
+                        onChange={(e) => handleInputChange('grade', e.target.value)}
+                        className="w-full py-5 px-6 rounded-2xl border-none bg-orange-50/50 text-lg font-bold appearance-none cursor-pointer"
+                      >
+                        <option value="SMALL">Small</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="LARGE">Large</option>
+                        <option value="EXTRA_LARGE">X-Large</option>
+                      </select>
+                    </div>
+                    <div className="space-y-2">
+                      <Label className="text-xs font-black text-gray-400">Market Quality</Label>
+                      <select
+                        value={formData.quality || 'GRADE_A'}
+                        onChange={(e) => handleInputChange('quality', e.target.value)}
+                        className="w-full py-5 px-6 rounded-2xl border-none bg-orange-50/50 text-lg font-bold appearance-none cursor-pointer"
+                      >
+                        <option value="GRADE_A">Grade A (Premium)</option>
+                        <option value="GRADE_B">Grade B (Standard)</option>
+                        <option value="GRADE_C">Grade C (Industrial)</option>
+                        <option value="SPOILED">Spoiled (Waste)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </form>
         </div>

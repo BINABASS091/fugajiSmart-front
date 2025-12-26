@@ -162,7 +162,7 @@ export function DiseasePredictionForm({ onPredictionComplete }: DiseasePredictio
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <FileImage className="h-5 w-5" />
-          Poultry Disease Detection
+          {t('disease.title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -176,10 +176,10 @@ export function DiseasePredictionForm({ onPredictionComplete }: DiseasePredictio
             <>
               <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <p className="text-lg font-medium text-gray-700 mb-2">
-                Upload a photo of your poultry
+                {t('disease.uploadPrompt')}
               </p>
               <p className="text-sm text-gray-500 mb-4">
-                Drag and drop or click to select an image
+                {t('disease.dragDrop')}
               </p>
               <input
                 type="file"
@@ -188,7 +188,7 @@ export function DiseasePredictionForm({ onPredictionComplete }: DiseasePredictio
                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
               <Button variant="outline" className="relative z-10 pointer-events-none">
-                Choose File
+                {t('disease.chooseFile')}
               </Button>
             </>
           ) : (
@@ -235,12 +235,12 @@ export function DiseasePredictionForm({ onPredictionComplete }: DiseasePredictio
             {isLoading ? (
               <>
                 <Clock className="h-5 w-5 animate-spin" />
-                Analyzing...
+                {t('disease.analyzing')}
               </>
             ) : (
               <>
                 <Zap className="h-5 w-5" />
-                Detect Disease
+                {t('disease.detectButton')}
               </>
             )}
           </Button>
@@ -251,12 +251,12 @@ export function DiseasePredictionForm({ onPredictionComplete }: DiseasePredictio
 
         {/* Tips */}
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <h4 className="font-medium text-blue-900 mb-2">Tips for better results:</h4>
+          <h4 className="font-medium text-blue-900 mb-2">{t('disease.tipsTitle')}</h4>
           <ul className="text-sm text-blue-800 space-y-1">
-            <li>• Use clear, well-lit photos</li>
-            <li>• Ensure the poultry is the main subject</li>
-            <li>• Avoid blurry or low-resolution images</li>
-            <li>• Multiple angles can provide better insights</li>
+            <li>• {t('disease.tip1')}</li>
+            <li>• {t('disease.tip2')}</li>
+            <li>• {t('disease.tip3')}</li>
+            <li>• {t('disease.tip4')}</li>
           </ul>
         </div>
       </CardContent>

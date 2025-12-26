@@ -101,27 +101,34 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               {links.map((link) => {
                 const Icon = link.icon;
                 const isActive = location.pathname === link.to;
+                const isDashboard = link.label.toLowerCase().includes('dashboard');
 
                 return (
                   <Link
                     key={link.to}
                     to={link.to}
                     onClick={onClose}
-                    className={`group flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 ${isActive
-                      ? 'bg-blue-600 text-white shadow-xl shadow-blue-200 scale-[1.02]'
-                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
-                      }`}
+                    className={`group flex items-center justify-between px-4 py-3.5 rounded-2xl transition-all duration-300 relative
+                      ${isActive ? 'bg-blue-600 text-white shadow-xl shadow-blue-200 scale-[1.02]' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}
+                      ${isActive && isDashboard ? 'border-l-8 border-amber-400 pl-2' : ''}
+                    `}
                   >
                     <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded-xl transition-colors ${isActive ? 'bg-white/20' : 'bg-gray-50 text-gray-400 group-hover:bg-white group-hover:text-blue-600'}`}>
-                        <Icon className="w-5 h-5" />
+                      <div className={`p-2 rounded-xl transition-colors flex items-center justify-center
+                        ${isActive ? 'bg-white/20' : 'bg-gray-50 text-gray-400 group-hover:bg-white group-hover:text-blue-600'}
+                        ${isActive && isDashboard ? 'animate-bounce-slow' : ''}
+                      `}>
+                        <Icon className={`w-6 h-6 ${isActive && isDashboard ? 'text-amber-300 drop-shadow-lg' : ''}`} />
                       </div>
-                      <span className="text-xs font-black uppercase tracking-widest">{link.label}</span>
+                      <span className={`tracking-widest font-black uppercase ${isDashboard && isActive ? 'text-base' : 'text-xs'}`}>{link.label}
+                        {isDashboard && isActive && <span className="ml-2 px-2 py-0.5 bg-amber-400 text-blue-900 rounded-full text-[10px] font-bold animate-pulse">Home</span>}
+                      </span>
                     </div>
                     {isActive && <ChevronRight className="w-4 h-4 opacity-50" />}
                   </Link>
                 );
               })}
+
             </div>
 
             {/* Pro Tip Card */}

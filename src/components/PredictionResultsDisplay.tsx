@@ -68,12 +68,12 @@ export function PredictionResultsDisplay({ result }: PredictionResultsDisplayPro
           <CardTitle className="flex items-center gap-3">
             {getStatusIcon(interpretation.status)}
             <div>
-              <h3 className="text-xl font-semibold">Analysis Results</h3>
+              <h3 className="text-xl font-semibold">{t('disease.analysisResults')}</h3>
               <div className="flex items-center gap-2 mt-1">
                 {getSeverityBadge(interpretation.severity)}
                 <span className="text-sm text-gray-500">
                   <Clock className="h-4 w-4 inline mr-1" />
-                  {new Date(result.timestamp).toLocaleString()}
+                  {t('disease.timestamp', { date: new Date(result.timestamp).toLocaleString() })}
                 </span>
               </div>
             </div>
@@ -93,27 +93,27 @@ export function PredictionResultsDisplay({ result }: PredictionResultsDisplayPro
           {/* Technical Details (Collapsible) */}
           <details className="border rounded-lg">
             <summary className="p-3 cursor-pointer hover:bg-gray-50 font-medium text-sm">
-              Technical Details
+              {t('disease.technicalDetails')}
             </summary>
             <div className="p-3 border-t bg-gray-50 text-sm space-y-2">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <span className="font-medium">Raw Prediction:</span>
+                  <span className="font-medium">{t('disease.rawPrediction')}:</span>
                   <br />
                   <span className="text-gray-600">{result.prediction}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Confidence:</span>
+                  <span className="font-medium">{t('disease.confidence')}:</span>
                   <br />
                   <span className="text-gray-600">{result.confidence_percentage}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Image Size:</span>
+                  <span className="font-medium">{t('disease.imageSize')}:</span>
                   <br />
                   <span className="text-gray-600">{result.image_size}</span>
                 </div>
                 <div>
-                  <span className="font-medium">Source:</span>
+                  <span className="font-medium">{t('disease.source')}:</span>
                   <br />
                   <span className="text-gray-600">{result.source}</span>
                 </div>

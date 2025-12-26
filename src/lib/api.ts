@@ -517,4 +517,69 @@ export const recommendationsApi = {
 };
 
 
+export const medicineApi = {
+  getInventory: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/medicine-inventory/${query}`);
+  },
+  createItem: async (data: any) => fetchApi('/medicine-inventory/', { method: 'POST', body: JSON.stringify(data) }),
+  updateItem: async (id: string, data: any) => fetchApi(`/medicine-inventory/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteItem: async (id: string) => fetchApi(`/medicine-inventory/${id}/`, { method: 'DELETE' }),
+  getAdministrations: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/medicine-administration/${query}`);
+  },
+  createAdministration: async (data: any) => fetchApi('/medicine-administration/', { method: 'POST', body: JSON.stringify(data) }),
+};
+
+export const equipmentApi = {
+  getAll: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/equipment-inventory/${query}`);
+  },
+  create: async (data: any) => fetchApi('/equipment-inventory/', { method: 'POST', body: JSON.stringify(data) }),
+  update: async (id: string, data: any) => fetchApi(`/equipment-inventory/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
+  delete: async (id: string) => fetchApi(`/equipment-inventory/${id}/`, { method: 'DELETE' }),
+};
+
+export const laborApi = {
+  getRecords: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/labor-records/${query}`);
+  },
+  createRecord: async (data: any) => fetchApi('/labor-records/', { method: 'POST', body: JSON.stringify(data) }),
+  updateRecord: async (id: string, data: any) => fetchApi(`/labor-records/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
+  deleteRecord: async (id: string) => fetchApi(`/labor-records/${id}/`, { method: 'DELETE' }),
+  getExpenses: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/service-expenses/${query}`);
+  },
+  createExpense: async (data: any) => fetchApi('/service-expenses/', { method: 'POST', body: JSON.stringify(data) }),
+};
+
+export const healthAlertsApi = {
+  getAll: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/health-alerts/${query}`);
+  },
+  resolve: async (id: string, notes?: string) => fetchApi(`/health-alerts/${id}/resolve/`, {
+    method: 'POST',
+    body: JSON.stringify({ resolution_notes: notes })
+  }),
+};
+
+export const eggsApi = {
+  getInventory: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/egg-inventory/${query}`);
+  },
+  createInventory: async (data: any) => fetchApi('/egg-inventory/', { method: 'POST', body: JSON.stringify(data) }),
+  updateInventory: async (id: string, data: any) => fetchApi(`/egg-inventory/${id}/`, { method: 'PATCH', body: JSON.stringify(data) }),
+  getSales: async (params?: any) => {
+    const query = params ? '?' + new URLSearchParams(params).toString() : '';
+    return fetchApi(`/egg-sales/${query}`);
+  },
+  createSale: async (data: any) => fetchApi('/egg-sales/', { method: 'POST', body: JSON.stringify(data) }),
+};
+
 export { API_BASE_URL };

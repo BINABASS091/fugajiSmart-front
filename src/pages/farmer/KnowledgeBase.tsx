@@ -144,9 +144,9 @@ export function KnowledgeBase() {
     }
   }, [selectedBreed, fetchBreedDetails]);
 
-  // Get localized categories and knowledge
-  const currentCategories = (knowledgeCategories as any)[language] || knowledgeCategories.en;
-  const currentKnowledge = (poultryKnowledge as any)[language] || poultryKnowledge.en;
+  // Get localized categories and knowledge with proper fallbacks
+  const currentCategories = (knowledgeCategories as any)?.[language] || (knowledgeCategories as any)?.en || [];
+  const currentKnowledge = (poultryKnowledge as any)?.[language] || (poultryKnowledge as any)?.en || {};
 
   const filteredRecommendations = recommendations.filter((rec) => {
     const matchesSearch =
@@ -156,9 +156,11 @@ export function KnowledgeBase() {
     return matchesSearch && matchesCategory;
   });
 
-  const filteredKnowledgeCategories = currentCategories.filter((cat: any) =>
-    cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredKnowledgeCategories = Array.isArray(currentCategories)
+    ? currentCategories.filter((cat: any) =>
+      cat?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    : [];
 
   const getCategoryTheme = (category: string) => {
     switch (category) {
