@@ -8,7 +8,7 @@ import { LanguageProvider } from './contexts/LanguageContext';
 // Initialize i18next
 import './i18n/config';
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "YOUR_GOOGLE_CLIENT_ID";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "150773637324-jv7p4bnsbaqpeiad3uihggm7ac1rqi3m.apps.googleusercontent.com";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

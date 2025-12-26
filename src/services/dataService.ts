@@ -14,12 +14,19 @@ import {
   inventoryAlertsApi
 } from '../lib/api';
 
+// Helper to handle paginated responses
+const getList = (data: any) => {
+  if (Array.isArray(data)) return data;
+  if (data && Array.isArray(data.results)) return data.results;
+  return [];
+};
+
 export const dataService = {
   // Farms
   getFarms: async (farmerId?: string): Promise<Farm[]> => {
     const params = farmerId ? { farmer: farmerId } : {};
     const res = await farmsApi.getAll(params);
-    return res.data || [];
+    return getList(res.data);
   },
 
   getFarmById: async (id: string): Promise<Farm | null> => {
@@ -46,7 +53,7 @@ export const dataService = {
   // Batches
   getBatches: async (farmId?: string, _farmerId?: string): Promise<Batch[]> => {
     const res = await batchesApi.getAll();
-    let data = res.data || [];
+    let data = getList(res.data);
     if (farmId) data = data.filter((b: any) => b.farm === farmId);
     return data;
   },
@@ -70,7 +77,7 @@ export const dataService = {
   // Devices
   getDevices: async (farmId?: string): Promise<Device[]> => {
     const res = await devicesApi.getAll();
-    let data = res.data || [];
+    let data = getList(res.data);
     if (farmId) data = data.filter((d: any) => d.farm === farmId);
     return data;
   },
@@ -84,7 +91,7 @@ export const dataService = {
   // Alerts
   getAlerts: async (_farmerId?: string): Promise<Alert[]> => {
     const res = await inventoryAlertsApi.getAll();
-    return res.data || [];
+    return getList(res.data);
   },
 
   createAlert: async (alert: Omit<Alert, 'id' | 'created_at'>): Promise<Alert> => {
@@ -115,7 +122,7 @@ export const dataService = {
   // Subscriptions
   getSubscriptions: async (_farmerId?: string): Promise<Subscription[]> => {
     const res = await subscriptionsApi.getAll();
-    return res.data || [];
+    return getList(res.data);
   },
 
   createSubscription: async (subscription: Omit<Subscription, 'id' | 'created_at'>): Promise<Subscription> => {
@@ -132,7 +139,7 @@ export const dataService = {
   // Inventory
   getInventory: async (_farmerId?: string): Promise<InventoryItem[]> => {
     const res = await inventoryApi.getItems();
-    return res.data || [];
+    return getList(res.data);
   },
 
   createInventoryItem: async (item: Omit<InventoryItem, 'id' | 'created_at' | 'updated_at'>): Promise<InventoryItem> => {

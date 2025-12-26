@@ -158,6 +158,8 @@ export function Login() {
         const { access_token } = tokenResponse;
 
         // Send access_token to backend
+        // Ensure CSRF token is set before making the request
+        await authApi.csrf();
         const { data, error } = await authApi.googleLogin(access_token);
 
         if (error) throw new Error(error);
