@@ -104,6 +104,7 @@
     "welcome": "Welcome back",
     "welcomeMessage": "Here's an overview of your poultry operations",
     "overview": "Overview",
+    "active": "Active",
     "statistics": "Statistics",
     "recentActivity": "Recent Activity",
     "totalFarmers": "Total Farmers",
@@ -234,6 +235,10 @@
     "currentPassword": "Current Password",
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password"
+  },
+  "activities": {
+    "title": "Activities",
+    "subtitle": "Manage and track all farm activities and tasks"
   },
   "knowledge": {
     "title": "Knowledge Base",

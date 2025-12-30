@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { dataService, Farm } from '../../services/dataService';
 import { useAuth } from '../../contexts/AuthContext';
+// Removed unused authApi import
 import { useLanguage } from '../../contexts/LanguageContext';
 import { useConfirm } from '../../hooks/useConfirm';
 import { Card } from '../../components/ui/card';
@@ -16,7 +17,6 @@ import {
   Trash2,
   Warehouse,
   ChevronRight,
-  ArrowRight,
   Maximize2,
   Activity,
   X,
@@ -61,16 +61,30 @@ export function FarmsManagement() {
   const handleAddFarm = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      if (!user) return;
-      await dataService.createFarm({
-        farmer_id: user.id,
+      if (!user) {
+        console.error('No user found');
+        return;
+      }
+      console.log('Current user object:', JSON.stringify(user, null, 2));
+      
+      // Prefer farmer_profile.id (UUID), fallback to user.id, else error
+      let farmerId = user.farmer_profile?.id || user.id;
+      if (!farmerId) {
+        throw new Error('No valid farmer UUID found. Please log in again.');
+      }
+      console.log('Preparing farm data for creation');
+      const farmData = {
         name: newFarm.name,
         location: newFarm.location,
-        size_hectares: newFarm.size_hectares ? parseFloat(newFarm.size_hectares) : null,
-        latitude: null,
-        longitude: null,
-        status: 'ACTIVE',
-      });
+        size_hectares: newFarm.size_hectares ? parseFloat(newFarm.size_hectares) : undefined,
+        latitude: undefined,
+        longitude: undefined,
+        status: 'ACTIVE' as const,
+        farmer_id: farmerId,
+        farmer: farmerId // for backward compatibility if needed
+      };
+      console.log('Creating farm with data:', farmData);
+      await dataService.createFarm(farmData);
       setShowAddModal(false);
       setNewFarm({ name: '', location: '', size_hectares: '' });
       fetchFarms();
@@ -370,8 +384,11 @@ export function FarmsManagement() {
                   <Input
                     type="number"
                     step="0.01"
-                    value={editingFarm.size_hectares || ''}
-                    onChange={(e) => setEditingFarm({ ...editingFarm, size_hectares: e.target.value ? parseFloat(e.target.value) : null })}
+                    value={editingFarm.size_hectares !== null && editingFarm.size_hectares !== undefined ? editingFarm.size_hectares : ''}
+                    onChange={(e) => setEditingFarm({ 
+                      ...editingFarm, 
+                      size_hectares: e.target.value ? parseFloat(e.target.value) : undefined 
+                    })}
                     className="py-7 rounded-2xl border-none bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-lg font-bold transition-all"
                   />
                 </div>

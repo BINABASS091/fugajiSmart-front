@@ -28,7 +28,7 @@ export interface Farmer {
 
 export interface Farm {
   id: string;
-  farmer_id: string;
+  farmer_id: string;  // Changed from 'farmer' to match backend
   name: string;
   location: string;
   size_hectares: number | null;
@@ -37,6 +37,9 @@ export interface Farm {
   status: 'ACTIVE' | 'INACTIVE' | 'MAINTENANCE';
   created_at: string;
   updated_at: string;
+  
+  // For backward compatibility
+  farmer?: string;
 }
 
 export interface Batch {

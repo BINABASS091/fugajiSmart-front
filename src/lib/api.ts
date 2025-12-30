@@ -582,4 +582,4 @@ export const eggsApi = {
   createSale: async (data: any) => fetchApi('/egg-sales/', { method: 'POST', body: JSON.stringify(data) }),
 };
 
-export { API_BASE_URL };
+export { API_BASE_URL, fetchApi };

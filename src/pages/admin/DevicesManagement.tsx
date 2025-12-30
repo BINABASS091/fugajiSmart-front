@@ -26,6 +26,7 @@ import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
 import { Input } from '../../components/ui/input';
 import { Label } from '../../components/ui/label';
+import { devicesApi } from '../../lib/api';
 
 const API_URL = (import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000/api/v1').replace(/\/+$/, '');
 
@@ -98,9 +99,9 @@ export function DevicesManagement() {
 
   const fetchDevices = useCallback(async () => {
     try {
-      const res = await fetch(`${API_URL}/devices/`, { credentials: 'include' });
-      if (!res.ok) throw new Error(`Devices fetch failed (${res.status})`);
-      const data = (await safeJson(res)) as any;
+      const res = await devicesApi.getAll();
+      if (res.error) throw new Error(res.error);
+      const data = res.data as any;
       const items = Array.isArray(data) ? data : Array.isArray(data?.results) ? data.results : [];
       setDevices(items);
     } catch (e: any) {
@@ -157,14 +158,13 @@ export function DevicesManagement() {
       notes: formData.notes || null,
     };
     try {
-      const url = editingDevice ? `${API_URL}/devices/${editingDevice.id}/` : `${API_URL}/devices/`;
-      const method = editingDevice ? 'PUT' : 'POST';
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error(await res.text() || `Save failed (${res.status})`);
+      let res;
+      if (editingDevice) {
+        res = await devicesApi.update(editingDevice.id, payload);
+      } else {
+        res = await devicesApi.create(payload);
+      }
+      if (res.error) throw new Error(res.error);
       setShowModal(false);
       setEditingDevice(null);
       resetForm();
@@ -184,8 +184,8 @@ export function DevicesManagement() {
     });
     if (!confirmed) return;
     try {
-      const res = await fetch(`${API_URL}/devices/${id}/`, { method: 'DELETE', credentials: 'include' });
-      if (!res.ok) throw new Error(`Delete protocol failed (${res.status})`);
+      const res = await devicesApi.delete(id);
+      if (res.error) throw new Error(res.error);
       await fetchDevices();
     } catch (e: any) {
       setError(e.message || 'Termination failed');
@@ -212,6 +212,11 @@ export function DevicesManagement() {
   const resetForm = () => {
     setFormData({ device_name: '', serial_number: '', device_type: 'TEMPERATURE_SENSOR', status: 'ACTIVE', farm_id: '', batch_id: '', firmware_version: '', installation_date: new Date().toISOString().split('T')[0], notes: '' });
     setBatches([]);
+  };
+
+  const handleFarmChange = (farmId: string) => {
+    setFormData({ ...formData, farm_id: farmId, batch_id: '' });
+    fetchBatches(farmId);
   };
 
   const filteredDevices = useMemo(() => devices.filter(d => {

@@ -71,7 +71,7 @@ export function ActivitiesManagement() {
         const enrichedActivities: ActivityWithBatch[] = activitiesData
           .map(activity => {
             const batch = batchesData.find(b => b.id === activity.batch_id);
-            const farm = batch ? farmsMap.get(batch.farm_id) : undefined;
+            const farm = batch ? farmsMap.get(batch.farm) : undefined;
             return {
               ...activity,
               batch: batch
@@ -86,12 +86,12 @@ export function ActivitiesManagement() {
         const enrichedBatches: BatchWithFarm[] = batchesData
           .filter(b => b.status === 'ACTIVE')
           .map(batch => {
-            const farm = farmsMap.get(batch.farm_id);
+            const farm = farmsMap.get(batch.farm);
             return {
               ...batch,
               farm: farm
                 ? { id: farm.id, name: farm.name }
-                : { id: batch.farm_id, name: 'Unknown Farm' },
+                : { id: batch.farm, name: 'Unknown Farm' },
             };
           });
         setActivities(enrichedActivities);
@@ -129,15 +129,21 @@ export function ActivitiesManagement() {
     e.preventDefault();
     try {
       if (!user) return;
-      await dataService.createActivity({
-        farmer_id: user.id,
-        batch_id: newActivity.batch_id,
+      if (!user.farmer_profile || !user.farmer_profile.id) {
+        alert('Error: Your farmer profile is missing or incomplete. Please contact support.');
+        return;
+      }
+      const payload = {
+        farmer: user.farmer_profile.id,
+        batch: newActivity.batch_id,
         activity_type: newActivity.activity_type,
         description: newActivity.description || null,
         scheduled_date: newActivity.scheduled_date,
         status: 'PENDING',
         completed_at: null,
-      });
+      };
+      console.log('Creating activity with payload:', payload);
+      await dataService.createActivity(payload);
       setShowAddModal(false);
       setNewActivity({ batch_id: '', activity_type: 'FEEDING', description: '', scheduled_date: '' });
       fetchData();
@@ -346,6 +352,13 @@ export function ActivitiesManagement() {
               </button>
             </div>
 
+            {/* Warning if no valid batches or farms */}
+            {(batches.length === 0) && (
+              <div className="p-4 mb-4 bg-amber-100 text-amber-700 rounded-xl text-center font-bold text-sm">
+                No active batches found. Please create a farm and at least one batch before scheduling activities.
+              </div>
+            )}
+
             <form onSubmit={handleAddActivity} className="p-10 pt-0 space-y-8">
               <div className="space-y-6">
                 <div className="space-y-2">
@@ -355,6 +368,7 @@ export function ActivitiesManagement() {
                     onChange={(e) => setNewActivity({ ...newActivity, batch_id: e.target.value })}
                     required
                     className="w-full px-6 py-5 bg-gray-50 border-none rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-sm font-bold transition-all outline-none"
+                    disabled={batches.length === 0}
                   >
                     <option value="">Choose Component</option>
                     {batches.map((batch) => (
@@ -372,6 +386,7 @@ export function ActivitiesManagement() {
                     onChange={(e) => setNewActivity({ ...newActivity, activity_type: e.target.value as Activity['activity_type'] })}
                     required
                     className="w-full px-6 py-5 bg-gray-50 border-none rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-sm font-bold transition-all outline-none uppercase tracking-widest text-[10px]"
+                    disabled={batches.length === 0}
                   >
                     <option value="FEEDING">Feeding Sequence</option>
                     <option value="VACCINATION">Vaccination Protocol</option>
@@ -389,6 +404,7 @@ export function ActivitiesManagement() {
                     onChange={(e) => setNewActivity({ ...newActivity, description: e.target.value })}
                     placeholder="Specify mission details..."
                     className="w-full p-6 bg-gray-50 border-none rounded-2xl focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-sm font-bold transition-all outline-none resize-none"
+                    disabled={batches.length === 0}
                   />
                 </div>
 
@@ -403,6 +419,7 @@ export function ActivitiesManagement() {
                       required
                       min={new Date().toISOString().split('T')[0]}
                       className="pl-14 py-7 rounded-2xl border-none bg-gray-50 focus:bg-white focus:ring-4 focus:ring-blue-500/10 text-sm font-bold transition-all"
+                      disabled={batches.length === 0}
                     />
                   </div>
                 </div>
@@ -420,6 +437,7 @@ export function ActivitiesManagement() {
                 <Button
                   type="submit"
                   className="flex-[2] py-7 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-blue-200 transition-all hover:-translate-y-1 active:scale-95"
+                  disabled={batches.length === 0 || !newActivity.batch_id}
                 >
                   Confirm Mandate
                 </Button>

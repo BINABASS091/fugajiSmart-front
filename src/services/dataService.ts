@@ -13,6 +13,7 @@ import {
   authApi,
   inventoryAlertsApi
 } from '../lib/api';
+import { activitiesApi } from '../lib/activitiesApi';
 
 // Helper to handle paginated responses
 const getList = (data: any) => {
@@ -111,8 +112,10 @@ export const dataService = {
     return [];
   },
 
-  createActivity: async (_activity: Omit<Activity, 'id' | 'created_at'>): Promise<Activity> => {
-    throw new Error('Activity creation not implemented in real API yet');
+  createActivity: async (activity: Omit<Activity, 'id' | 'created_at'>): Promise<Activity> => {
+    const res = await activitiesApi.create(activity);
+    if (res.error) throw new Error(res.error);
+    return res.data!;
   },
 
   updateActivity: async (_id: string, _updates: Partial<Activity>): Promise<Activity | null> => {

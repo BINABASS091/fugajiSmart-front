@@ -1,6 +1,15 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 import { authApi } from '../lib/api';
 
+interface FarmerProfile {
+  id: string;
+  business_name?: string;
+  location?: string;
+  experience_years?: number;
+  verification_status?: string;
+  avatar_url?: string | null;
+}
+
 interface User {
   id: string;
   email: string;
@@ -11,6 +20,7 @@ interface User {
   avatar_url?: string | null;
   created_at?: string;
   updated_at?: string;
+  farmer_profile?: FarmerProfile | null;
 }
 
 interface AuthContextType {
@@ -39,7 +49,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return null;
       }
       if (response.data) {
-        setUser(response.data);
+        // If farmer_profile is present, ensure it is always an object (not undefined)
+        const userData = {
+          ...response.data,
+          farmer_profile: response.data.farmer_profile || null,
+        };
+        setUser(userData);
       } else {
         setUser(null);
       }
