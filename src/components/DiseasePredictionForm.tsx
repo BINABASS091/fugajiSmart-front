@@ -4,6 +4,7 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { PredictionResultsDisplay } from './PredictionResultsDisplay';
 import { useAuth } from '../contexts/AuthContext';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export interface PredictionResult {
   prediction: string;
@@ -32,6 +33,7 @@ const MOCK_PREDICTIONS = [
 
 export function DiseasePredictionForm({ onPredictionComplete }: DiseasePredictionFormProps) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);

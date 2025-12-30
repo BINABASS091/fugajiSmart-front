@@ -1,6 +1,7 @@
 import { AlertTriangle, CheckCircle, AlertCircle, HelpCircle, Lightbulb, Activity, Clock } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { DiseaseInterpreter } from '../services/diseaseInterpreter';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface PredictionResult {
   prediction: string;
@@ -18,6 +19,7 @@ interface PredictionResultsDisplayProps {
 }
 
 export function PredictionResultsDisplay({ result }: PredictionResultsDisplayProps) {
+  const { t } = useLanguage();
   const interpretation = DiseaseInterpreter.interpretPrediction(result.prediction, result.confidence);
   
   const getStatusIcon = (status: string) => {

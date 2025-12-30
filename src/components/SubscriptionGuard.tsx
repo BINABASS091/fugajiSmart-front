@@ -13,7 +13,7 @@ interface SubscriptionGuardProps {
   showUpgrade?: boolean;
 }
 
-const PLAN_HIERARCHY = {
+const PLAN_HIERARCHY: Record<string, number> = {
   'FREE': 0,
   'BASIC': 1,
   'PREMIUM': 2,
@@ -30,7 +30,22 @@ const SubscriptionGuard: React.FC<SubscriptionGuardProps> = ({
   const { subscription } = useSubscription();
   const navigate = useNavigate();
   
-  const currentPlan = subscription?.plan_type || 'FREE';
+  // Get current plan from the context's plan limits logic
+  const getCurrentPlan = () => {
+    if (!subscription?.plan) return 'FREE';
+    
+    // Map plan UUIDs to plan names
+    const planMap: Record<string, string> = {
+      'e26d445c-830c-4cbd-a373-041591571a65': 'FREE',
+      '88cf2e12-facf-4264-a3a3-1f7bdbdd5527': 'BASIC',
+      '3f44713d-e12d-45a7-94d4-ec713c7b4ac6': 'PREMIUM',
+      '57c80757-0014-4208-a642-96bfa724ff89': 'ENTERPRISE'
+    };
+    
+    return planMap[subscription.plan] || 'FREE';
+  };
+  
+  const currentPlan = getCurrentPlan();
   const hasAccess = PLAN_HIERARCHY[currentPlan] >= PLAN_HIERARCHY[planRequired];
 
   const handleUpgrade = () => {

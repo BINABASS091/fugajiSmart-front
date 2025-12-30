@@ -38,7 +38,7 @@ interface PlanFeature {
 }
 
 interface Plan {
-  id: 'FREE' | 'BASIC' | 'PREMIUM' | 'ENTERPRISE';
+  id: string;
   name: string;
   price: number;
   duration: string;
@@ -59,7 +59,7 @@ const Subscription: React.FC = () => {
 
   const plans: Plan[] = [
     {
-      id: 'FREE',
+      id: 'e26d445c-830c-4cbd-a373-041591571a65',
       name: 'Community',
       price: 0,
       duration: 'Forever',
@@ -77,7 +77,7 @@ const Subscription: React.FC = () => {
       ]
     },
     {
-      id: 'BASIC',
+      id: '88cf2e12-facf-4264-a3a3-1f7bdbdd5527',
       name: 'Operational',
       price: 15,
       duration: 'per month',
@@ -95,7 +95,7 @@ const Subscription: React.FC = () => {
       ]
     },
     {
-      id: 'PREMIUM',
+      id: '3f44713d-e12d-45a7-94d4-ec713c7b4ac6',
       name: 'Advanced',
       price: 35,
       duration: 'per month',
@@ -114,7 +114,7 @@ const Subscription: React.FC = () => {
       ]
     },
     {
-      id: 'ENTERPRISE',
+      id: '57c80757-0014-4208-a642-96bfa724ff89',
       name: 'Sovereign',
       price: 99,
       duration: 'per month',
@@ -153,21 +153,24 @@ const Subscription: React.FC = () => {
     fetchSubscription();
   }, [fetchSubscription]);
 
-  const handleUpgrade = async (planId: 'FREE' | 'BASIC' | 'PREMIUM' | 'ENTERPRISE') => {
+  const handleUpgrade = async (planId: string) => {
     if (!user) return;
     try {
       setLoading(true);
-      const endDate = planId === 'FREE' ? null : new Date();
+      const endDate = planId === 'e26d445c-830c-4cbd-a373-041591571a65' ? new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) : new Date();
       if (endDate) endDate.setDate(endDate.getDate() + 30);
 
       await dataService.createSubscription({
-        farmer_id: user.id,
-        plan_type: planId,
+        farmer: user.id,
+        plan: planId,
         start_date: new Date().toISOString(),
-        end_date: endDate ? endDate.toISOString() : null,
+        end_date: endDate.toISOString(),
         amount: plans.find(p => p.id === planId)?.price || 0,
-        status: 'active',
+        status: 'ACTIVE' as const,
+        is_active: true,
+        auto_renew: false,
       });
+      console.log('Subscription created with plan ID:', planId);
 
       await refreshSubscription();
       await fetchSubscription();

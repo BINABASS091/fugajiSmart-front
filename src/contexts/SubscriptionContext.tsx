@@ -1,16 +1,17 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { mockDataService } from '../services/mockData';
+import { dataService } from '../services/dataService';
 import { useAuth } from './AuthContext';
 
 interface Subscription {
   id: string;
-  farmer_id: string;
-  plan_type: 'FREE' | 'BASIC' | 'PREMIUM' | 'ENTERPRISE';
+  farmer: string;
+  plan: string;
+  status: 'TRIAL' | 'ACTIVE' | 'CANCELLED' | 'EXPIRED' | 'PAYMENT_PENDING';
   start_date: string;
-  end_date: string | null;
+  end_date: string;
   amount: number;
-  status: 'active' | 'expired' | 'cancelled';
-  created_at: string;
+  is_active: boolean;
+  auto_renew: boolean;
 }
 
 interface PlanLimits {
@@ -97,7 +98,17 @@ export const SubscriptionProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [error, setError] = useState<string | null>(null);
 
   const getCurrentPlan = () => {
-    return subscription?.plan_type || 'FREE';
+    if (!subscription?.plan) return 'FREE';
+    
+    // Map plan UUIDs to plan names
+    const planMap: Record<string, string> = {
+      'e26d445c-830c-4cbd-a373-041591571a65': 'FREE',
+      '88cf2e12-facf-4264-a3a3-1f7bdbdd5527': 'BASIC',
+      '3f44713d-e12d-45a7-94d4-ec713c7b4ac6': 'PREMIUM',
+      '57c80757-0014-4208-a642-96bfa724ff89': 'ENTERPRISE'
+    };
+    
+    return planMap[subscription.plan] || 'FREE';
   };
 
   const planLimits = PLAN_LIMITS[getCurrentPlan()];
@@ -118,10 +129,14 @@ export const SubscriptionProvider: React.FC<{ children: ReactNode }> = ({ childr
       setLoading(true);
       setError(null);
 
-      const subscriptions = mockDataService.getSubscriptions(user.id);
+      const subscriptions = await dataService.getSubscriptions(user.id);
+      console.log('Fetched subscriptions:', subscriptions);
+      
       const activeSubscription = subscriptions
-        .filter(s => s.status === 'active')
-        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())[0];
+        .filter((s: any) => s.status === 'ACTIVE')
+        .sort((a: any, b: any) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime())[0];
+
+      console.log('Active subscription:', activeSubscription);
 
       // Check if subscription is expired
       if (activeSubscription && activeSubscription.end_date) {
@@ -129,7 +144,6 @@ export const SubscriptionProvider: React.FC<{ children: ReactNode }> = ({ childr
         const now = new Date();
         if (endDate < now) {
           // Mark subscription as expired
-          mockDataService.updateSubscription(activeSubscription.id, { status: 'expired' });
           setSubscription(null);
         } else {
           setSubscription(activeSubscription);
