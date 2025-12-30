@@ -86,7 +86,9 @@ export function AllFarmsManagement() {
     try {
       const { data, error } = await farmsApi.getAll();
       if (error) throw error;
-      setFarms(Array.isArray(data) ? data : []);
+      // Check if data has results property (paginated response)
+      const farmsArray = Array.isArray(data?.results) ? data.results : Array.isArray(data) ? data : [];
+      setFarms(farmsArray);
     } catch (error: any) {
       console.error('Error fetching farms:', error);
       setError(error.message);
@@ -124,9 +126,9 @@ export function AllFarmsManagement() {
       const payload = {
         name: formData.name,
         location: formData.location,
-        size_hectares: formData.size_hectares ? parseFloat(formData.size_hectares) : null,
-        latitude: formData.latitude ? parseFloat(formData.latitude) : null,
-        longitude: formData.longitude ? parseFloat(formData.longitude) : null,
+        size_hectares: formData.size_hectares ? parseFloat(formData.size_hectares) : undefined,
+        latitude: formData.latitude ? parseFloat(formData.latitude) : undefined,
+        longitude: formData.longitude ? parseFloat(formData.longitude) : undefined,
         status: formData.status,
         farmer_id: formData.farmer_id,
       };
@@ -154,7 +156,14 @@ export function AllFarmsManagement() {
       await farmsApi.delete(id);
       await fetchFarms();
     } catch (error: any) {
-      setError(error.message || 'Purge protocol failed');
+      // Check if it's the permission error we know about
+      if (error.message && error.message.includes('farmer_profile')) {
+        setError('Delete failed due to permission issue. The farm may not be properly associated with a farmer profile.');
+      } else {
+        setError(error.message || 'Purge protocol failed');
+      }
+      // Still try to refresh the list in case the delete worked despite the error
+      setTimeout(() => fetchFarms(), 1000);
     }
   };
 
@@ -180,8 +189,8 @@ export function AllFarmsManagement() {
     const matchesSearch =
       farm.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       farm.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      farm.farmer.user.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      farm.farmer.business_name?.toLowerCase().includes(searchTerm.toLowerCase());
+      (farm.farmer?.user?.full_name && farm.farmer.user.full_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (farm.farmer?.business_name && farm.farmer.business_name.toLowerCase().includes(searchTerm.toLowerCase()));
     const matchesStatus = statusFilter === 'ALL' || farm.status === statusFilter;
     return matchesSearch && matchesStatus;
   }), [farms, searchTerm, statusFilter]);
@@ -341,8 +350,12 @@ export function AllFarmsManagement() {
                     </td>
                     <td className="px-10 py-8">
                       <div className="flex flex-col">
-                        <span className="text-sm font-black text-gray-700 uppercase tracking-tight leading-none mb-1">{farm.farmer.user.full_name}</span>
-                        <span className="text-[10px] font-bold text-gray-400">{farm.farmer.business_name || farm.farmer.user.email}</span>
+                        <span className="text-sm font-black text-gray-700 uppercase tracking-tight leading-none mb-1">
+                          {farm.farmer?.user?.full_name || 'Unknown Operator'}
+                        </span>
+                        <span className="text-[10px] font-bold text-gray-400">
+                          {farm.farmer?.business_name || farm.farmer?.user?.email || 'N/A'}
+                        </span>
                       </div>
                     </td>
                     <td className="px-10 py-8">
@@ -371,9 +384,15 @@ export function AllFarmsManagement() {
                     </td>
                     <td className="px-10 py-8">
                       <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Link to={`/admin/farmers/${farm.farmer.id}`} className="p-3 bg-white hover:bg-indigo-600 hover:text-white rounded-xl shadow-sm border border-gray-50 transition-all"><Eye className="w-4 h-4" /></Link>
+                        {/* <Link to={`/admin/farmers/${farm.farmer.id}`} className="p-3 bg-white hover:bg-indigo-600 hover:text-white rounded-xl shadow-sm border border-gray-50 transition-all"><Eye className="w-4 h-4" /></Link> */}
                         <button onClick={() => openEditModal(farm)} className="p-3 bg-white hover:bg-emerald-600 hover:text-white rounded-xl shadow-sm border border-gray-50 transition-all"><Edit2 className="w-4 h-4" /></button>
-                        <button onClick={() => handleDelete(farm.id)} className="p-3 bg-white hover:bg-rose-600 hover:text-white rounded-xl shadow-sm border border-gray-50 transition-all"><Trash2 className="w-4 h-4" /></button>
+                        <button 
+                          onClick={() => handleDelete(farm.id)} 
+                          className="p-3 bg-white hover:bg-rose-600 hover:text-white rounded-xl shadow-sm border border-gray-50 transition-all"
+                          title="Delete may fail due to permissions"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>

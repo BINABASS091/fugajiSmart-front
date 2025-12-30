@@ -79,17 +79,26 @@ export function BatchesManagement() {
       const today = new Date();
       const ageDays = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
-      await dataService.createBatch({
-        farm_id: newBatch.farm_id,
+      const payload = {
+        farm: newBatch.farm_id, // Changed from farm_id to farm
         batch_number: newBatch.batch_number,
         breed: newBatch.breed,
         quantity: parseInt(newBatch.quantity),
         start_date: newBatch.start_date,
-        expected_end_date: null,
+        expected_end_date: undefined, // Changed from null to undefined
         status: 'ACTIVE',
         mortality_count: 0,
         current_age_days: ageDays > 0 ? ageDays : 0,
-      });
+      };
+
+      console.log('Creating batch with payload:', payload);
+      console.log('farm value:', payload.farm);
+      console.log('farm type:', typeof payload.farm);
+      console.log('farm is empty string:', payload.farm === '');
+      console.log('farm is null:', payload.farm === null);
+      console.log('farm is undefined:', payload.farm === undefined);
+
+      await dataService.createBatch(payload);
 
       setShowAddModal(false);
       setNewBatch({ farm_id: '', batch_number: '', breed: '', quantity: '', start_date: '' });

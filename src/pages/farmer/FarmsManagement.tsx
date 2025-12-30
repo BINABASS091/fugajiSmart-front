@@ -40,13 +40,34 @@ export function FarmsManagement() {
   });
 
   const fetchFarms = useCallback(async () => {
-    if (!user) return;
+    console.log('fetchFarms called, user:', user);
+    if (!user) {
+      console.log('No user found, returning');
+      return;
+    }
     try {
-      const farmsData = await dataService.getFarms(user.id);
-      const sorted = farmsData.sort((a, b) =>
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-      setFarms(sorted);
+      // Use the same logic as handleAddFarm to get the farmer ID
+      let farmerId = user.farmer_profile?.id || user.id;
+      console.log('User object:', user);
+      console.log('Farmer ID:', farmerId);
+      
+      if (!farmerId) {
+        console.warn('No farmer ID found, fetching all farms');
+        const farmsData = await dataService.getFarms();
+        console.log('Fetched farms data:', farmsData);
+        const sorted = farmsData.sort((a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        console.log('Setting farms:', sorted);
+        setFarms(sorted);
+      } else {
+        const farmsData = await dataService.getFarms(farmerId);
+        console.log('Fetched farms data for farmer:', farmsData);
+        const sorted = farmsData.sort((a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        setFarms(sorted);
+      }
     } catch (error) {
       console.error('Error fetching farms:', error);
     } finally {
@@ -67,12 +88,15 @@ export function FarmsManagement() {
       }
       console.log('Current user object:', JSON.stringify(user, null, 2));
       
-      // Prefer farmer_profile.id (UUID), fallback to user.id, else error
-      let farmerId = user.farmer_profile?.id || user.id;
-      if (!farmerId) {
-        throw new Error('No valid farmer UUID found. Please log in again.');
+      // Check if we have the required profile information
+      if (!user.email) {
+        throw new Error('User email not found. Please log in again.');
       }
+      
       console.log('Preparing farm data for creation');
+      
+      // Since farmer_profile is null and user.id doesn't exist, 
+      // we'll let the backend associate the farm with the authenticated user
       const farmData = {
         name: newFarm.name,
         location: newFarm.location,
@@ -80,8 +104,7 @@ export function FarmsManagement() {
         latitude: undefined,
         longitude: undefined,
         status: 'ACTIVE' as const,
-        farmer_id: farmerId,
-        farmer: farmerId // for backward compatibility if needed
+        farmer_id: user.id, // Use user.id as farmer_id - backend will handle the association
       };
       console.log('Creating farm with data:', farmData);
       await dataService.createFarm(farmData);

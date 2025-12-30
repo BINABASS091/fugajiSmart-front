@@ -18,7 +18,8 @@ export interface FarmerProfile {
 
 export interface Farm {
     id: string;
-    farmer: string;
+    farmer?: string;
+    farmer_id?: string;
     name: string;
     location: string;
     size_hectares?: number;

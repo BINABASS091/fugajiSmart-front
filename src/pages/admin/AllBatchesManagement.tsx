@@ -170,6 +170,13 @@ export function AllBatchesManagement() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    
+    // Validate that a farm is selected
+    if (!formData.farm_id) {
+      setError('Please select a farm for this batch');
+      return;
+    }
+    
     const payload = {
       batch_number: formData.batch_number.trim(),
       breed: formData.breed.trim(),
@@ -179,8 +186,16 @@ export function AllBatchesManagement() {
       status: formData.status,
       mortality_count: Number(formData.mortality_count || 0),
       current_age_days: Number(formData.current_age_days || 0),
-      farm_id: formData.farm_id,
+      farm: formData.farm_id, // Changed from farm_id to farm
     };
+    
+    console.log('Creating batch with payload:', payload);
+    console.log('farm value:', payload.farm);
+    console.log('farm type:', typeof payload.farm);
+    console.log('farm is empty string:', payload.farm === '');
+    console.log('farm is null:', payload.farm === null);
+    console.log('farm is undefined:', payload.farm === undefined);
+    
     try {
       const result = editingBatch ? await batchesApi.update(editingBatch.id, payload) : await batchesApi.create(payload);
       if (result.error) throw new Error(result.error);
