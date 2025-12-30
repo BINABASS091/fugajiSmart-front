@@ -107,9 +107,12 @@ export const dataService = {
   },
 
   // Activities
-  getActivities: async (_farmerId?: string, _batchId?: string): Promise<Activity[]> => {
-    // Placeholder as activitiesApi is not in lib/api.ts
-    return [];
+  getActivities: async (farmerId?: string, batchId?: string): Promise<Activity[]> => {
+    const params: Record<string, string> = {};
+    if (farmerId) params.farmer = farmerId;
+    if (batchId) params.batch = batchId;
+    const res = await activitiesApi.getAll(params);
+    return getList(res.data);
   },
 
   createActivity: async (activity: Omit<Activity, 'id' | 'created_at'>): Promise<Activity> => {
@@ -118,8 +121,10 @@ export const dataService = {
     return res.data!;
   },
 
-  updateActivity: async (_id: string, _updates: Partial<Activity>): Promise<Activity | null> => {
-    throw new Error('Activity update not implemented in real API yet');
+  updateActivity: async (id: string, updates: Partial<Activity>): Promise<Activity | null> => {
+    const res = await activitiesApi.patch(id, updates);
+    if (res.error) throw new Error(res.error);
+    return res.data;
   },
 
   // Subscriptions

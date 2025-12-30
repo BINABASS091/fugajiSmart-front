@@ -33,6 +33,7 @@ export interface Farm {
 export interface Batch {
     id: string;
     farm: string;
+    farm_name?: string;
     batch_number: string;
     breed: string;
     breed_config?: string;

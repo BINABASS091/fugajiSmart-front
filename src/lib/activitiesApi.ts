@@ -14,6 +14,9 @@ export const activitiesApi = {
   async update(id: string, data: any) {
     return fetchApi<any>(`activities/${id}/`, { method: 'PUT', body: JSON.stringify(data) });
   },
+  async patch(id: string, data: any) {
+    return fetchApi<any>(`activities/${id}/`, { method: 'PATCH', body: JSON.stringify(data) });
+  },
   async delete(id: string) {
     return fetchApi<void>(`activities/${id}/`, { method: 'DELETE' });
   },

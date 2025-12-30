@@ -11,22 +11,27 @@ import {
   CheckCircle,
   Clock,
   Plus,
-  Search,
   Filter,
-  ChevronRight,
   X,
-  AlertTriangle,
   History,
   LayoutGrid,
   ClipboardList,
   Warehouse,
   Package
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import type { Activity, Batch, Farm } from '../../services/mockData';
+import type { Activity } from '../../services/mockData';
 import { format } from 'date-fns';
 
-interface ActivityWithBatch extends Activity {
+interface ActivityWithBatch {
+  id: string;
+  farm?: string;
+  farmer: string;
+  activity_type: 'FEEDING' | 'VACCINATION' | 'CLEANING' | 'INSPECTION' | 'OTHER';
+  description?: string;
+  status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
+  scheduled_date: string;
+  completed_at?: string;
+  created_at: string;
   batch: {
     batch_number: string;
     farm: {
@@ -35,11 +40,21 @@ interface ActivityWithBatch extends Activity {
   };
 }
 
-interface BatchWithFarm extends Batch {
-  farm: {
-    id: string;
-    name: string;
-  };
+interface BatchWithFarm {
+  id: string;
+  farm: string;
+  farm_name?: string;
+  batch_number: string;
+  breed: string;
+  breed_config?: string;
+  quantity: number;
+  start_date: string;
+  expected_end_date?: string;
+  status: string;
+  mortality_count: number;
+  current_age_days: number;
+  created_at: string;
+  updated_at: string;
 }
 
 export function ActivitiesManagement() {
@@ -61,23 +76,21 @@ export function ActivitiesManagement() {
     if (!user) return;
     try {
       const farmsData = await dataService.getFarms(user.id);
-      const farmIds = farmsData.map(f => f.id);
-      if (farmIds.length > 0) {
+      if (farmsData.length > 0) {
         const [activitiesData, batchesData] = await Promise.all([
           dataService.getActivities(user.id),
           dataService.getBatches(undefined, user.id),
         ]);
-        const farmsMap = new Map(farmsData.map(f => [f.id, f]));
         const enrichedActivities: ActivityWithBatch[] = activitiesData
           .map(activity => {
-            const batch = batchesData.find(b => b.id === activity.batch_id);
-            const farm = batch ? farmsMap.get(batch.farm) : undefined;
+            const batch = batchesData.find(b => b.id === activity.batch);
+            const farmName = batch?.farm_name || 'Unknown Farm';
             return {
               ...activity,
               batch: batch
                 ? {
                   batch_number: batch.batch_number,
-                  farm: { name: farm?.name || 'Unknown Farm' },
+                  farm: { name: farmName },
                 }
                 : { batch_number: 'Unknown', farm: { name: 'Unknown Farm' } },
             };
@@ -86,12 +99,9 @@ export function ActivitiesManagement() {
         const enrichedBatches: BatchWithFarm[] = batchesData
           .filter(b => b.status === 'ACTIVE')
           .map(batch => {
-            const farm = farmsMap.get(batch.farm);
             return {
               ...batch,
-              farm: farm
-                ? { id: farm.id, name: farm.name }
-                : { id: batch.farm, name: 'Unknown Farm' },
+              farm_name: batch.farm_name || 'Unknown Farm',
             };
           });
         setActivities(enrichedActivities);
@@ -129,18 +139,18 @@ export function ActivitiesManagement() {
     e.preventDefault();
     try {
       if (!user) return;
-      if (!user.farmer_profile || !user.farmer_profile.id) {
-        alert('Error: Your farmer profile is missing or incomplete. Please contact support.');
+      if (!user.id) {
+        alert('Error: User information is missing. Please log in again.');
         return;
       }
       const payload = {
-        farmer: user.farmer_profile.id,
+        farmer: user.id,
         batch: newActivity.batch_id,
         activity_type: newActivity.activity_type,
-        description: newActivity.description || null,
+        description: newActivity.description || undefined,
         scheduled_date: newActivity.scheduled_date,
-        status: 'PENDING',
-        completed_at: null,
+        status: 'PENDING' as const,
+        completed_at: undefined,
       };
       console.log('Creating activity with payload:', payload);
       await dataService.createActivity(payload);
@@ -373,7 +383,7 @@ export function ActivitiesManagement() {
                     <option value="">Choose Component</option>
                     {batches.map((batch) => (
                       <option key={batch.id} value={batch.id}>
-                        {batch.batch_number} ({batch.farm.name})
+                        {batch.batch_number} ({batch.farm_name || 'Unknown Farm'})
                       </option>
                     ))}
                   </select>
