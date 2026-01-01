@@ -25,7 +25,7 @@ import {
 import { format } from 'date-fns';
 
 interface BatchWithFarm extends Batch {
-  farm: Farm;
+  farm_info: Farm; // Use different property name to avoid conflict
 }
 
 export function BatchesManagement() {
@@ -35,8 +35,9 @@ export function BatchesManagement() {
   const [farms, setFarms] = useState<Farm[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [error, setError] = useState('');
   const [newBatch, setNewBatch] = useState({
-    farm_id: '',
+    farm: '', // Changed from farm_id to farm to match Batch interface
     batch_number: '',
     breed: '',
     quantity: '',
@@ -51,10 +52,10 @@ export function BatchesManagement() {
       if (farmsData.length > 0) {
         const batchesData = await dataService.getBatches(undefined, user.id);
         const batchesWithFarms: BatchWithFarm[] = batchesData.map(batch => {
-          const farm = farmsData.find(f => f.id === batch.farm_id);
+          const farm = farmsData.find(f => f.id === batch.farm);
           return {
             ...batch,
-            farm: farm || farmsData[0],
+            farm_info: farm || farmsData[0],
           };
         }).sort((a, b) =>
           new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
@@ -74,13 +75,25 @@ export function BatchesManagement() {
 
   const handleAddBatch = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate farm selection
+    if (!newBatch.farm || newBatch.farm.trim() === '') {
+      const errorMessage = t('batches.selectFarmError') || 'Please select a farm before creating a batch';
+      console.error('Farm ID is required');
+      setError(errorMessage);
+      return;
+    }
+    
+    // Clear any previous errors
+    setError('');
+    
     try {
       const startDate = new Date(newBatch.start_date);
       const today = new Date();
       const ageDays = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
 
       const payload = {
-        farm: newBatch.farm_id, // Changed from farm_id to farm
+        farm: newBatch.farm, // Backend expects 'farm' field
         batch_number: newBatch.batch_number,
         breed: newBatch.breed,
         quantity: parseInt(newBatch.quantity),
@@ -101,7 +114,7 @@ export function BatchesManagement() {
       await dataService.createBatch(payload);
 
       setShowAddModal(false);
-      setNewBatch({ farm_id: '', batch_number: '', breed: '', quantity: '', start_date: '' });
+      setNewBatch({ farm: '', batch_number: '', breed: '', quantity: '', start_date: '' });
       fetchData();
     } catch (error) {
       console.error('Error adding batch:', error);
@@ -190,7 +203,7 @@ export function BatchesManagement() {
                     <h3 className="text-2xl font-black text-gray-900 tracking-tight uppercase group-hover:text-emerald-600 transition-colors leading-none">{batch.batch_number}</h3>
                     <div className="flex items-center gap-2 mt-2">
                       <Warehouse className="w-3 h-3 text-gray-400" />
-                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{batch.farm.name}</p>
+                      <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{batch.farm_info.name}</p>
                     </div>
                   </div>
                 </div>
@@ -273,12 +286,22 @@ export function BatchesManagement() {
             </div>
 
             <form onSubmit={handleAddBatch} className="p-10 pt-0 space-y-8">
+              {/* Error Display */}
+              {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-2xl mb-6">
+                  <div className="flex items-center gap-2">
+                    <AlertCircle className="w-5 h-5 text-red-500" />
+                    <p className="text-red-700 font-medium text-sm">{error}</p>
+                  </div>
+                </div>
+              )}
+              
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Target Infrastructure</Label>
                   <select
-                    value={newBatch.farm_id}
-                    onChange={(e) => setNewBatch({ ...newBatch, farm_id: e.target.value })}
+                    value={newBatch.farm}
+                    onChange={(e) => setNewBatch({ ...newBatch, farm: e.target.value })}
                     required
                     className="w-full px-6 py-5 bg-gray-50 border-none rounded-2xl focus:bg-white focus:ring-4 focus:ring-emerald-500/10 text-sm font-bold transition-all outline-none"
                   >

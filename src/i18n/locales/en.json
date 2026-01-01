@@ -202,7 +202,8 @@
     "totalBirds": "Total Birds",
     "avgSurvivalRate": "Avg Survival Rate",
     "needFarmFirst": "You need to register a farm before adding batches",
-    "activeBatches": "active batches"
+    "activeBatches": "active batches",
+    "selectFarmError": "Please select a farm before creating a batch"
   },
   "profile": {
     "title": "My Profile",
