@@ -3,6 +3,7 @@ import { MessageCircle, Send, X, Bot, User, Loader2, Languages } from 'lucide-re
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useSubscription } from '../contexts/SubscriptionContext';
+import { useAuth } from '../contexts/AuthContext';
 
 // API Base URL
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/+$/, '') || 'http://127.0.0.1:8000/api/v1';
@@ -30,6 +31,12 @@ const FugajiBot: React.FC = () => {
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const { subscription } = useSubscription();
+    const { user } = useAuth();
+
+    // Hide FugajiBot for Admin users - only show for Farmers
+    if (user?.role === 'ADMIN') {
+        return null;
+    }
 
     // Check if user has premium subscription
     const hasPremiumAccess = () => {
