@@ -240,7 +240,7 @@ const InventoryManagement: React.FC = () => {
   }
 
   return (
-    <SubscriptionGuard feature="Inventory Management" planRequired="BASIC">
+    <SubscriptionGuard feature="Inventory Management" planRequired="PREMIUM">
       <div className="max-w-[1600px] mx-auto space-y-8 pb-12 animate-[fadeIn_0.5s_ease-out]">
 
         {/* Header Section */}

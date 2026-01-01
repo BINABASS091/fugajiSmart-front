@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, Send, X, Bot, User, Loader2, Languages } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
+import { useSubscription } from '../contexts/SubscriptionContext';
 
 // API Base URL
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.trim().replace(/\/+$/, '') || 'http://127.0.0.1:8000/api/v1';
@@ -28,6 +29,31 @@ const FugajiBot: React.FC = () => {
     const [language, setLanguage] = useState<'sw' | 'en'>('sw');
     const [suggestions, setSuggestions] = useState<string[]>([]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const { subscription } = useSubscription();
+
+    // Check if user has premium subscription
+    const hasPremiumAccess = () => {
+        if (!subscription?.plan) return false;
+        
+        const planMap: Record<string, string> = {
+            'e26d445c-830c-4cbd-a373-041591571a65': 'FREE',
+            '88cf2e12-facf-4264-a3a3-1f7bdbdd5527': 'BASIC',
+            '3f44713d-e12d-45a7-94d4-ec713c7b4ac6': 'PREMIUM',
+            '57c80757-0014-4208-a642-96bfa724ff89': 'ENTERPRISE'
+        };
+        
+        const currentPlan = planMap[subscription.plan] || 'FREE';
+        return ['PREMIUM', 'ENTERPRISE'].includes(currentPlan);
+    };
+
+    const handleBotClick = () => {
+        if (hasPremiumAccess()) {
+            setIsOpen(true);
+        } else {
+            // Show upgrade prompt
+            alert('FugajiBot AI Assistant\n\nThis feature requires a PREMIUM plan or higher. Upgrade your subscription to access advanced functionality.\n\nCurrent: FREE Plan\nRequired: PREMIUM Plan\n\nUpgrade Plan');
+        }
+    };
 
     // Welcome message
     useEffect(() => {
@@ -134,7 +160,7 @@ const FugajiBot: React.FC = () => {
             {/* Floating button */}
             {!isOpen && (
                 <button
-                    onClick={() => setIsOpen(true)}
+                    onClick={handleBotClick}
                     className="fixed bottom-6 right-6 w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full shadow-2xl hover:shadow-blue-500/50 hover:scale-110 transition-all duration-300 flex items-center justify-center z-50 group"
                     aria-label="Open FugajiBot"
                 >

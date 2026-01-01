@@ -3,7 +3,7 @@ import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import FugajiBot from './FugajiBot';
 import { useOnlineStatus } from '../hooks/useOnlineStatus';
-import { WifiOff, CloudOff } from 'lucide-react';
+import { CloudOff } from 'lucide-react';
 
 interface DashboardLayoutProps {
   children: ReactNode;

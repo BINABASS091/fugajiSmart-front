@@ -80,7 +80,7 @@ export default function DiseasePredictionPage() {
   };
 
   return (
-    <SubscriptionGuard feature="Disease Prediction" planRequired="BASIC">
+    <SubscriptionGuard feature="Disease Prediction" planRequired="ENTERPRISE">
       <div className="space-y-12 pb-20 max-w-5xl mx-auto">
         {/* Dynamic Header */}
         <div className="text-center space-y-4">
