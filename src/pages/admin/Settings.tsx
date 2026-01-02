@@ -1,25 +1,20 @@
-import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   User,
-  Bell,
-  Shield,
-  Database,
   AlertCircle,
   Check,
   Settings as SettingsIcon,
   ChevronRight,
   ShieldCheck,
-  Zap,
-  Globe,
-  Cpu,
   Fingerprint,
   Radio,
   Clock,
   Save,
   Lock,
   Mail,
-  Smartphone,
+  Cpu,
+  Zap,
   Server
 } from 'lucide-react';
 import { Card } from '../../components/ui/card';
@@ -99,7 +94,7 @@ export function Settings() {
     setError('');
     setSuccess('');
     try {
-      setSuccess('Communication nodes recalibrated');
+      setSuccess('Notification settings updated successfully');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error: any) {
       setError(error.message);
@@ -114,7 +109,7 @@ export function Settings() {
     setError('');
     setSuccess('');
     try {
-      setSuccess('Kernel parameters updated');
+      setSuccess('System settings updated successfully');
       setTimeout(() => setSuccess(''), 3000);
     } catch (error: any) {
       setError(error.message);
@@ -127,16 +122,16 @@ export function Settings() {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] animate-pulse">
         <div className="w-16 h-16 border-4 border-indigo-50 border-t-indigo-600 rounded-full animate-spin mb-6"></div>
-        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">System Matrix Decrypting...</p>
+        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">Loading settings...</p>
       </div>
     );
   }
 
   const tabs = [
-    { id: 'profile' as const, name: 'Operator ID', icon: Fingerprint, detail: 'Identity Mapping' },
-    { id: 'notifications' as const, name: 'Comm Link', icon: Radio, detail: 'Signal Matrix' },
-    { id: 'security' as const, name: 'Firewall', icon: ShieldCheck, detail: 'Access Protocol' },
-    { id: 'system' as const, name: 'Kernel', icon: Server, detail: 'Base Parameters' },
+    { id: 'profile' as const, name: 'Profile', icon: Fingerprint, detail: 'Personal Information' },
+    { id: 'notifications' as const, name: 'Notifications', icon: Radio, detail: 'Alert Settings' },
+    { id: 'security' as const, name: 'Security', icon: ShieldCheck, detail: 'Privacy Settings' },
+    { id: 'system' as const, name: 'System', icon: Server, detail: 'Platform Settings' },
   ];
 
   return (
@@ -148,12 +143,12 @@ export function Settings() {
             <div className="p-2 bg-indigo-600 text-white rounded-xl shadow-lg shadow-indigo-200">
               <SettingsIcon className="w-4 h-4" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">System Matrix Controller</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Settings Control Panel</span>
           </div>
           <h1 className="text-5xl font-black text-gray-900 tracking-tighter uppercase leading-none">
-            Logic <span className="text-gray-400">Gates</span>
+            System <span className="text-gray-400">Settings</span>
           </h1>
-          <p className="text-gray-500 font-bold text-lg leading-relaxed">Configuring platform architecture and secure operator identities.</p>
+          <p className="text-gray-500 font-bold text-lg leading-relaxed">Configure platform settings and user preferences.</p>
         </div>
       </div>
 
@@ -200,23 +195,23 @@ export function Settings() {
             {activeTab === 'profile' && (
               <div className="space-y-10 animate-fadeIn">
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Identity <span className="text-gray-400">Ledger</span></h2>
-                  <p className="text-gray-500 font-bold">Personalizing operator identification credentials.</p>
+                  <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Profile <span className="text-gray-400">Settings</span></h2>
+                  <p className="text-gray-500 font-bold">Update your personal information and account details.</p>
                 </div>
 
                 <form onSubmit={handleProfileUpdate} className="space-y-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-2">
-                      <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Universal Designation (Full Name)</Label>
+                      <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Full Name</Label>
                       <Input
                         value={profileData.full_name}
                         onChange={(e) => setProfileData({ ...profileData, full_name: e.target.value })}
                         className="py-7 rounded-2xl border-none bg-gray-50 focus:bg-white focus:ring-4 focus:ring-indigo-500/10 text-sm font-bold"
-                        placeholder="DESIGNATION-ALPHA"
+                        placeholder="Enter your full name"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Comm Channel (Phone)</Label>
+                      <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Phone Number</Label>
                       <Input
                         value={profileData.phone}
                         onChange={(e) => setProfileData({ ...profileData, phone: e.target.value })}
@@ -227,7 +222,7 @@ export function Settings() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Encrypted Mail (Immutable)</Label>
+                    <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Email Address</Label>
                     <div className="relative group">
                       <Input
                         disabled
@@ -241,7 +236,7 @@ export function Settings() {
                   <div className="pt-6 border-t border-gray-50 flex justify-end">
                     <Button type="submit" disabled={saving} className="px-10 py-7 bg-gray-900 text-white rounded-3xl hover:bg-black transition-all font-black text-[10px] uppercase tracking-widest flex items-center gap-3">
                       {saving ? <Clock className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                      Commit Changes
+                      Save Changes
                     </Button>
                   </div>
                 </form>
@@ -251,18 +246,18 @@ export function Settings() {
             {activeTab === 'notifications' && (
               <div className="space-y-10 animate-fadeIn">
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Signal <span className="text-gray-400">Matrix</span></h2>
-                  <p className="text-gray-500 font-bold">Managing incoming telemetry and operational broadcasts.</p>
+                  <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Notification <span className="text-gray-400">Settings</span></h2>
+                  <p className="text-gray-500 font-bold">Manage your notification preferences and alert settings.</p>
                 </div>
 
                 <form onSubmit={handleNotificationUpdate} className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
-                    { key: 'email_alerts', label: 'Primary Mail Link', detail: 'Critical vector broadcasts', icon: Mail },
-                    { key: 'new_farmer_registrations', label: 'Infiltration Alert', detail: 'New operator onboarding', icon: User },
-                    { key: 'critical_alerts', label: 'Red Team Signal', detail: 'Immediate threat detection', icon: AlertCircle },
-                    { key: 'device_failures', label: 'Module Decay Pulse', detail: 'Hardware logic monitoring', icon: Cpu },
-                    { key: 'subscription_updates', label: 'Revenue Pulse', detail: 'Tier escalation mapping', icon: Zap },
-                    { key: 'weekly_reports', label: 'Status Aggregation', detail: 'System-wide health reports', icon: Clock }
+                    { key: 'email_alerts', label: 'Email Alerts', detail: 'Receive email notifications', icon: Mail },
+                    { key: 'new_farmer_registrations', label: 'New Users', detail: 'New user registrations', icon: User },
+                    { key: 'critical_alerts', label: 'Critical Alerts', detail: 'Urgent system notifications', icon: AlertCircle },
+                    { key: 'device_failures', label: 'Device Issues', detail: 'Hardware problem alerts', icon: Cpu },
+                    { key: 'subscription_updates', label: 'Subscription Updates', detail: 'Payment and plan changes', icon: Zap },
+                    { key: 'weekly_reports', label: 'Weekly Reports', detail: 'System activity summaries', icon: Clock }
                   ].map((item) => {
                     const Icon = item.icon;
                     const isChecked = (notificationSettings as any)[item.key];
@@ -285,7 +280,7 @@ export function Settings() {
                   <div className="md:col-span-2 pt-6 border-t border-gray-50 flex justify-end mt-4">
                     <Button type="submit" disabled={saving} className="px-10 py-7 bg-gray-900 text-white rounded-3xl hover:bg-black transition-all font-black text-[10px] uppercase tracking-widest flex items-center gap-3">
                       <Save className="w-4 h-4" />
-                      Sync Matrix
+                      Save Settings
                     </Button>
                   </div>
                 </form>
@@ -295,8 +290,8 @@ export function Settings() {
             {activeTab === 'security' && (
               <div className="space-y-10 animate-fadeIn">
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Access <span className="text-gray-400">Protocol</span></h2>
-                  <p className="text-gray-500 font-bold">Hardening platform barriers and authentication logic.</p>
+                  <h2 className="text-3xl font-black text-gray-900 uppercase tracking-tight">Security <span className="text-gray-400">Settings</span></h2>
+                  <p className="text-gray-500 font-bold">Manage your account security and privacy settings.</p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

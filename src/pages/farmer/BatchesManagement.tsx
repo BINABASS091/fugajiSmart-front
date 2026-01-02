@@ -152,7 +152,7 @@ export function BatchesManagement() {
             className="group flex items-center gap-3 px-8 py-5 bg-emerald-600 text-white rounded-[2rem] shadow-2xl shadow-emerald-200 hover:bg-emerald-700 hover:-translate-y-1 transition-all duration-300 font-black text-[10px] uppercase tracking-[0.2em]"
           >
             <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
-            Deploy New Batch
+            Add New Batch
           </button>
         )}
       </div>
@@ -162,13 +162,13 @@ export function BatchesManagement() {
           <div className="w-24 h-24 bg-rose-50 rounded-[2.5rem] flex items-center justify-center mb-8">
             <AlertCircle className="w-12 h-12 text-rose-500" />
           </div>
-          <h3 className="text-2xl font-black text-gray-900 mb-4">Infrastructure Missing</h3>
+          <h3 className="text-2xl font-black text-gray-900 mb-4">No Farm Setup</h3>
           <p className="text-gray-400 font-bold max-w-sm mb-10">{t('batches.needFarmFirst')}</p>
           <Link
             to="/farmer/farms"
             className="px-10 py-5 bg-gray-900 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-gray-200"
           >
-            Establish Farm Registry
+            Create Your First Farm
           </Link>
         </div>
       ) : batches.length === 0 ? (
@@ -176,13 +176,13 @@ export function BatchesManagement() {
           <div className="w-24 h-24 bg-gray-50 rounded-[2.5rem] flex items-center justify-center mb-8">
             <Package className="w-12 h-12 text-gray-200" />
           </div>
-          <h3 className="text-2xl font-black text-gray-900 mb-4">No Active Pulses</h3>
-          <p className="text-gray-400 font-bold max-w-sm mb-10">You have no biological batches currently under management.</p>
+          <h3 className="text-2xl font-black text-gray-900 mb-4">No Batches Yet</h3>
+          <p className="text-gray-400 font-bold max-w-sm mb-10">You don't have any chicken batches yet. Add your first batch to get started.</p>
           <button
             onClick={() => setShowAddModal(true)}
             className="px-10 py-5 bg-emerald-600 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-emerald-200"
           >
-            Deploy Your First Batch
+            Add Your First Batch
           </button>
         </div>
       ) : (
@@ -219,14 +219,14 @@ export function BatchesManagement() {
 
               <div className="grid grid-cols-2 gap-4 mb-8 relative z-10">
                 <div className="p-5 bg-gray-50 rounded-3xl border border-gray-100">
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 leading-none">Biological Breed</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 leading-none">Chicken Breed</p>
                   <div className="flex items-center gap-2 text-gray-900 mt-2">
                     <Fingerprint className="w-4 h-4 text-emerald-500" />
                     <span className="text-sm font-black uppercase">{batch.breed}</span>
                   </div>
                 </div>
                 <div className="p-5 bg-gray-50 rounded-3xl border border-gray-100">
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 leading-none">Net Payload</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 leading-none">Total Birds</p>
                   <div className="flex items-center gap-2 text-gray-900 mt-2">
                     <Bird className="w-4 h-4 text-blue-500" />
                     <span className="text-lg font-black">{batch.quantity.toLocaleString()}</span>
@@ -238,9 +238,9 @@ export function BatchesManagement() {
                 <div className="flex items-center justify-between px-2">
                   <div className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-gray-400" />
-                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Growth Cycle</span>
+                    <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Age</span>
                   </div>
-                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">{batch.current_age_days} Days Exp.</span>
+                  <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">{batch.current_age_days} Days Old</span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded-full overflow-hidden p-0.5">
                   <div
@@ -253,14 +253,14 @@ export function BatchesManagement() {
               <div className="flex items-center justify-between p-5 bg-rose-50/50 rounded-3xl border border-rose-100 mb-8 relative z-10">
                 <div className="flex items-center gap-3">
                   <Activity className="w-5 h-5 text-rose-500" />
-                  <span className="text-[10px] font-black text-rose-700 uppercase tracking-widest">Mortality Log</span>
+                  <span className="text-[10px] font-black text-rose-700 uppercase tracking-widest">Deaths</span>
                 </div>
                 <span className="text-lg font-black text-rose-700">{batch.mortality_count}</span>
               </div>
 
               <div className="relative z-10">
                 <button className="flex items-center justify-center gap-3 w-full py-5 bg-gray-900 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all shadow-xl shadow-gray-200">
-                  Deploy Intelligence
+                  View Details
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

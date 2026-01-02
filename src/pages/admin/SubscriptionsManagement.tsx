@@ -158,19 +158,19 @@ export function SubscriptionsManagement() {
             <div className="p-2 bg-indigo-600 text-white rounded-xl">
               <DollarSign className="w-4 h-4" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Financial Resource Controller</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Subscription Management</span>
           </div>
           <h1 className="text-5xl font-black text-gray-900 tracking-tighter uppercase leading-none">
-            Access <span className="text-gray-400">Stream</span>
+            Subscription <span className="text-gray-400">Overview</span>
           </h1>
-          <p className="text-gray-500 font-bold text-lg leading-relaxed">Monitoring unit monetization and tier distribution.</p>
+          <p className="text-gray-500 font-bold text-lg leading-relaxed">Manage user subscriptions and payment plans.</p>
         </div>
         <button
           onClick={fetchAllFarmerSubscriptions}
           className="px-8 py-4 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest flex items-center gap-3"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
-          Recalibrate
+          Refresh Data
         </button>
       </div>
 
@@ -185,12 +185,12 @@ export function SubscriptionsManagement() {
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Base Population</h4>
-              <p className="text-4xl font-black text-gray-900 tracking-tighter">{stats.totalFarmers} Units</p>
+              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Users</h4>
+              <p className="text-4xl font-black text-gray-900 tracking-tighter">{stats.totalFarmers} Users</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-black text-emerald-600 uppercase">
               <TrendingUp className="w-3.5 h-3.5" />
-              Global Operator Pool
+              All Registered Users
             </div>
           </div>
         </Card>
@@ -204,12 +204,12 @@ export function SubscriptionsManagement() {
               <Crown className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Advanced Access</h4>
+              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Paid Plans</h4>
               <p className="text-4xl font-black text-emerald-600 tracking-tighter">{stats.paidPlans} Active</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase">
               <Target className="w-3.5 h-3.5" />
-              {((stats.paidPlans / stats.totalFarmers) * 100).toFixed(1)}% Saturation
+              {((stats.paidPlans / stats.totalFarmers) * 100).toFixed(1)}% Conversion
             </div>
           </div>
         </Card>
@@ -223,7 +223,7 @@ export function SubscriptionsManagement() {
               <DollarSign className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Cumulative Yield</h4>
+              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Revenue</h4>
               <p className="text-4xl font-black text-gray-900 tracking-tighter">${stats.totalRevenue.toLocaleString()}</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-black text-blue-600 uppercase">
@@ -242,12 +242,12 @@ export function SubscriptionsManagement() {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Valid Intervals</h4>
-              <p className="text-4xl font-black text-gray-900 tracking-tighter">{stats.activeSubscriptions} Units</p>
+              <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Active Plans</h4>
+              <p className="text-4xl font-black text-gray-900 tracking-tighter">{stats.activeSubscriptions} Plans</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-black text-rose-600 uppercase">
               <Zap className="w-3.5 h-3.5" />
-              Verified Sessions
+              Active Subscriptions
             </div>
           </div>
         </Card>
@@ -260,7 +260,7 @@ export function SubscriptionsManagement() {
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 w-5 h-5 group-focus-within:text-indigo-600 transition-colors" />
             <input
               type="text"
-              placeholder="Search operator identification..."
+              placeholder="Search user name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-16 pr-8 py-6 bg-gray-50 border-none rounded-3xl focus:ring-4 focus:ring-indigo-500/10 text-lg font-bold transition-all outline-none"
@@ -273,9 +273,9 @@ export function SubscriptionsManagement() {
               className="px-8 py-6 bg-gray-50 border-none rounded-3xl text-[10px] font-black uppercase tracking-widest text-gray-600 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none min-w-[200px]"
             >
               <option value="ALL">All Status</option>
-              <option value="ACTIVE">Authorized</option>
-              <option value="EXPIRED">Deactivated</option>
-              <option value="CANCELLED">Terminated</option>
+              <option value="ACTIVE">Active</option>
+              <option value="EXPIRED">Expired</option>
+              <option value="CANCELLED">Cancelled</option>
             </select>
             <select
               value={planFilter}
@@ -283,10 +283,10 @@ export function SubscriptionsManagement() {
               className="px-8 py-6 bg-gray-50 border-none rounded-3xl text-[10px] font-black uppercase tracking-widest text-gray-600 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none min-w-[200px]"
             >
               <option value="ALL">All Tiers</option>
-              <option value="FREE">Standard</option>
-              <option value="BASIC">Performance</option>
-              <option value="PREMIUM">Elite</option>
-              <option value="ENTERPRISE">Paramount</option>
+              <option value="FREE">Free</option>
+              <option value="BASIC">Basic</option>
+              <option value="PREMIUM">Premium</option>
+              <option value="ENTERPRISE">Enterprise</option>
             </select>
           </div>
         </div>

@@ -197,7 +197,7 @@ export function FarmsManagement() {
             onClick={() => setShowAddModal(true)}
             className="px-10 py-5 bg-gray-900 text-white rounded-[2rem] font-black text-[10px] uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-gray-200"
           >
-            Deploy First Infrastructure
+            Create Your First Farm
           </button>
         </div>
       ) : (
@@ -239,17 +239,17 @@ export function FarmsManagement() {
 
               <div className="grid grid-cols-2 gap-4 mb-8 relative z-10">
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Deployed</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Created</p>
                   <div className="flex items-center gap-2 text-gray-900">
                     <Calendar className="w-3.5 h-3.5 text-blue-500" />
                     <span className="text-xs font-black">{format(new Date(farm.created_at), 'MMM d, yyyy')}</span>
                   </div>
                 </div>
                 <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Status Pulse</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Health Status</p>
                   <div className="flex items-center gap-2 text-emerald-600">
                     <Activity className="w-3.5 h-3.5" />
-                    <span className="text-xs font-black uppercase tracking-tight">Optimal</span>
+                    <span className="text-xs font-black uppercase tracking-tight">Good</span>
                   </div>
                 </div>
               </div>
@@ -259,7 +259,7 @@ export function FarmsManagement() {
                   to={`/farmer/farms/${farm.id}`}
                   className="flex-[2] flex items-center justify-center gap-3 py-5 bg-gray-900 hover:bg-black text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all shadow-lg shadow-gray-200"
                 >
-                  Unit Intelligence
+                  Farm Details
                   <ChevronRight className="w-4 h-4" />
                 </Link>
                 <button
@@ -292,7 +292,7 @@ export function FarmsManagement() {
                 <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-200">
                   <Plus className="w-6 h-6 text-white" />
                 </div>
-                <h2 className="text-3xl font-black text-gray-900 tracking-tight uppercase">New Unit</h2>
+                <h2 className="text-3xl font-black text-gray-900 tracking-tight uppercase">New Farm</h2>
               </div>
               <button onClick={() => setShowAddModal(false)} className="p-3 bg-gray-50 hover:bg-gray-100 rounded-2xl text-gray-400 transition-all">
                 <X className="w-6 h-6" />
@@ -302,7 +302,7 @@ export function FarmsManagement() {
             <form onSubmit={handleAddFarm} className="p-10 pt-0 space-y-8">
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Asset Identity</Label>
+                  <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Farm Name</Label>
                   <Input
                     type="text"
                     value={newFarm.name}
@@ -314,7 +314,7 @@ export function FarmsManagement() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Geographical Focus</Label>
+                  <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Location</Label>
                   <div className="relative group">
                     <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-rose-500 transition-colors" />
                     <Input
@@ -329,7 +329,7 @@ export function FarmsManagement() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Spatial Capacity (Hectares)</Label>
+                  <Label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Size (Hectares)</Label>
                   <Input
                     type="number"
                     step="0.01"

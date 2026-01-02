@@ -176,7 +176,7 @@ export function ActivitiesManagement() {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] animate-pulse">
         <div className="w-16 h-16 border-4 border-blue-50 border-t-blue-600 rounded-full animate-spin mb-6"></div>
-        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">Action Stream Synchronizing...</p>
+        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">Loading activities...</p>
       </div>
     );
   }
@@ -196,7 +196,7 @@ export function ActivitiesManagement() {
             <div className="p-2 bg-blue-50 text-blue-600 rounded-xl">
               <ClipboardList className="w-4 h-4" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Operational Flow</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Task Management</span>
           </div>
           <h1 className="text-4xl font-black text-gray-900 tracking-tight uppercase">
             {t('activities.title')} <span className="text-blue-600">[{stats.pending}]</span>
@@ -209,7 +209,7 @@ export function ActivitiesManagement() {
             className="group flex items-center gap-3 px-8 py-5 bg-blue-600 text-white rounded-[2rem] shadow-2xl shadow-blue-200 hover:bg-blue-700 hover:-translate-y-1 transition-all duration-300 font-black text-[10px] uppercase tracking-[0.2em]"
           >
             <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform duration-500" />
-            Schedule Protocol
+            Add New Task
           </button>
         )}
       </div>
@@ -218,20 +218,20 @@ export function ActivitiesManagement() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="p-8 bg-blue-600 rounded-[40px] text-white shadow-2xl shadow-blue-200 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Total Lifecycle</p>
+          <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Total Tasks</p>
           <h3 className="text-4xl font-black">{stats.total}</h3>
           <p className="text-[10px] font-black uppercase tracking-widest mt-4 flex items-center gap-2">
             <History className="w-3 h-3" />
-            Historical Record
+            All Activities
           </p>
         </div>
         <div className="p-8 bg-amber-500 rounded-[40px] text-white shadow-2xl shadow-amber-200 relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-32 h-32 -mr-8 -mt-8 bg-white/10 rounded-full group-hover:scale-150 transition-transform duration-700"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Active Mandates</p>
+          <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-1">Pending Tasks</p>
           <h3 className="text-4xl font-black">{stats.pending}</h3>
           <p className="text-[10px] font-black uppercase tracking-widest mt-4 flex items-center gap-2">
             <Clock className="w-3 h-3 text-white" />
-            Execution Pending
+            To Be Done
           </p>
         </div>
         <div className="p-8 bg-emerald-500 rounded-[40px] text-white shadow-2xl shadow-emerald-200 relative overflow-hidden group">
@@ -240,7 +240,7 @@ export function ActivitiesManagement() {
           <h3 className="text-4xl font-black">{Math.round((stats.completed / (stats.total || 1)) * 100)}%</h3>
           <p className="text-[10px] font-black uppercase tracking-widest mt-4 flex items-center gap-2">
             <CheckCircle className="w-3 h-3" />
-            Validation Complete
+            Completed
           </p>
         </div>
       </div>
@@ -272,8 +272,8 @@ export function ActivitiesManagement() {
             <div className="w-20 h-20 bg-gray-50 rounded-3xl flex items-center justify-center mb-6">
               <Calendar className="w-10 h-10 text-gray-200" />
             </div>
-            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">Stream Empty</h3>
-            <p className="text-gray-400 font-bold max-w-sm mt-3 px-6">No scheduled operations detected in this vector.</p>
+            <h3 className="text-xl font-black text-gray-900 uppercase tracking-tight">No Activities</h3>
+            <p className="text-gray-400 font-bold max-w-sm mt-3 px-6">No activities found. Add your first task to get started.</p>
           </div>
         ) : (
           filteredActivities.map((activity) => {

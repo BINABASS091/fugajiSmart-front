@@ -122,7 +122,7 @@ export function AdminDashboard() {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] animate-pulse">
         <div className="w-16 h-16 border-4 border-gray-50 border-t-gray-900 rounded-full animate-spin mb-6"></div>
-        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">System Metircs Aggregating...</p>
+        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">Loading system data...</p>
       </div>
     );
   }
@@ -136,17 +136,17 @@ export function AdminDashboard() {
             <div className="p-2 bg-gray-900 text-white rounded-xl">
               <ShieldCheck className="w-4 h-4" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Command Center Alpha</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Admin Dashboard</span>
           </div>
           <h1 className="text-5xl font-black text-gray-900 tracking-tighter uppercase leading-none">
-            Platform <span className="text-gray-400">Pulse</span>
+            System <span className="text-gray-400">Overview</span>
           </h1>
-          <p className="text-gray-500 font-bold text-lg leading-relaxed">System-wide monitoring and resource orchestration.</p>
+          <p className="text-gray-500 font-bold text-lg leading-relaxed">Monitor all system activity and performance.</p>
         </div>
         <div className="flex items-center gap-4">
           <div className="px-5 py-3 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center gap-3">
             <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-            <span className="text-[10px] font-black uppercase tracking-widest">Master Node Link: Active</span>
+            <span className="text-[10px] font-black uppercase tracking-widest">System Connected</span>
           </div>
         </div>
       </div>
@@ -154,10 +154,10 @@ export function AdminDashboard() {
       {/* Hero Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Network Operators', val: stats.totalUsers, sub: `${stats.verifiedFarmers} Verified`, icon: Users, color: 'blue' },
-          { label: 'Strategic Units', val: stats.activeFarms, sub: `Across ${stats.totalFarms} clusters`, icon: Warehouse, color: 'indigo' },
-          { label: 'Cloud Revenue', val: `$${(stats.activeSubscriptions * 35).toLocaleString()}`, sub: 'Monthly Recurring', icon: DollarSign, color: 'emerald' },
-          { label: 'System Volatility', val: stats.criticalAlerts, sub: 'Needs Intervention', icon: AlertTriangle, color: stats.criticalAlerts > 0 ? 'rose' : 'gray' },
+          { label: 'Total Users', val: stats.totalUsers, sub: `${stats.verifiedFarmers} Verified`, icon: Users, color: 'blue' },
+          { label: 'Active Farms', val: stats.activeFarms, sub: `Across ${stats.totalFarms} locations`, icon: Warehouse, color: 'indigo' },
+          { label: 'Monthly Income', val: `$${(stats.activeSubscriptions * 35).toLocaleString()}`, sub: 'Monthly Recurring', icon: DollarSign, color: 'emerald' },
+          { label: 'Critical Alerts', val: stats.criticalAlerts, sub: 'Needs Attention', icon: AlertTriangle, color: stats.criticalAlerts > 0 ? 'rose' : 'gray' },
         ].map((stat, i) => (
           <Card key={i} className="p-8 bg-white border border-gray-100 rounded-[40px] shadow-xl shadow-gray-200/40 relative overflow-hidden group">
             <div className={`absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-${stat.color}-50 rounded-full group-hover:scale-150 transition-transform duration-700`}></div>
@@ -182,31 +182,31 @@ export function AdminDashboard() {
           <div className="flex items-center justify-between px-2">
             <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight flex items-center gap-3">
               <TrendingUp className="w-6 h-6 text-indigo-600" />
-              Operational Status
+              System Status
             </h2>
             <div className="flex items-center gap-2 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-              Manual Sync Complete
+              Data Updated
               <div className="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <StatCard title="Active Protocols" value={stats.activeBatches} icon={Package} color="blue" />
-            <StatCard title="Network Nodes" value={stats.activeDevices} icon={Radio} color="emerald" />
-            <StatCard title="Uplink Failed" value={stats.offlineDevices} icon={Radio} color="rose" />
-            <StatCard title="Premium Licenses" value={stats.activeSubscriptions} icon={DollarSign} color="indigo" />
+            <StatCard title="Active Batches" value={stats.activeBatches} icon={Package} color="blue" />
+            <StatCard title="Connected Devices" value={stats.activeDevices} icon={Radio} color="emerald" />
+            <StatCard title="Offline Devices" value={stats.offlineDevices} icon={Radio} color="rose" />
+            <StatCard title="Active Subscriptions" value={stats.activeSubscriptions} icon={DollarSign} color="indigo" />
           </div>
 
           <Card className="bg-white border border-gray-100 rounded-[40px] shadow-xl shadow-gray-200/40 p-8">
             <div className="flex items-center justify-between mb-8">
-              <h3 className="text-xl font-black text-gray-900 uppercase">System Integrity Feed</h3>
+              <h3 className="text-xl font-black text-gray-900 uppercase">System Health</h3>
               <Clock className="w-5 h-5 text-gray-300" />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {[
-                { label: 'Core Database', status: 'Healthy', icon: Globe, color: 'emerald' },
-                { label: 'API Gateway', status: 'Operational', icon: Cpu, color: 'blue' },
-                { label: 'IOT Network', status: 'Optimal', icon: Zap, color: 'amber' },
+                { label: 'Database', status: 'Healthy', icon: Globe, color: 'emerald' },
+                { label: 'API Server', status: 'Operational', icon: Cpu, color: 'blue' },
+                { label: 'Device Network', status: 'Optimal', icon: Zap, color: 'amber' },
               ].map((svc, i) => (
                 <div key={i} className="p-6 bg-gray-50 rounded-3xl space-y-4">
                   <div className={`p-3 bg-${svc.color}-50 text-${svc.color}-600 inline-block rounded-xl`}>
@@ -224,10 +224,10 @@ export function AdminDashboard() {
 
         {/* Activity Intelligence */}
         <div className="space-y-8">
-          <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight px-2">Access Log</h2>
+          <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight px-2">Recent Activity</h2>
           <Card className="bg-white border border-gray-100 rounded-[40px] shadow-xl shadow-gray-200/40 p-8 space-y-6">
             {recentActivities.length === 0 ? (
-              <div className="py-20 text-center text-gray-300 font-bold uppercase text-[10px] tracking-widest">Log stream empty</div>
+              <div className="py-20 text-center text-gray-300 font-bold uppercase text-[10px] tracking-widest">No recent activity</div>
             ) : (
               <div className="space-y-6">
                 {recentActivities.map((activity) => (
@@ -237,7 +237,7 @@ export function AdminDashboard() {
                     </div>
                     <div className="flex-1">
                       <p className="text-[10px] font-black text-gray-900 uppercase tracking-tight leading-tight">{activity.message}</p>
-                      <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{formatTimeAgo(activity.timestamp)} • SYNC SUCCESS</p>
+                      <p className="text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-widest">{formatTimeAgo(activity.timestamp)} • Updated</p>
                     </div>
                     <ChevronRight className="w-4 h-4 text-gray-200" />
                   </div>
@@ -247,13 +247,13 @@ export function AdminDashboard() {
           </Card>
 
           <div className="space-y-4">
-            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Operational Links</h3>
+            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest px-2">Quick Links</h3>
             <div className="grid grid-cols-1 gap-3">
               {[
-                { to: '/admin/farmers', label: 'Operator Registry', color: 'blue' },
-                { to: '/admin/subscriptions', label: 'Financial Control', color: 'emerald' },
-                { to: '/admin/breeds', label: 'Logic Configurator', color: 'amber' },
-                { to: '/admin/settings', label: 'Core Parameters', color: 'indigo' },
+                { to: '/admin/farmers', label: 'User Management', color: 'blue' },
+                { to: '/admin/subscriptions', label: 'Subscription Management', color: 'emerald' },
+                { to: '/admin/breeds', label: 'Breed Settings', color: 'amber' },
+                { to: '/admin/settings', label: 'System Settings', color: 'indigo' },
               ].map((lnk, i) => (
                 <Link key={i} to={lnk.to} className="flex items-center justify-between p-5 bg-white border border-gray-100 rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group">
                   <span className="text-[10px] font-black uppercase tracking-widest text-gray-900">{lnk.label}</span>

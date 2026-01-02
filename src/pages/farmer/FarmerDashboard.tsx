@@ -114,7 +114,7 @@ export function FarmerDashboard() {
     return (
       <div className="flex flex-col items-center justify-center h-[60vh] animate-pulse">
         <div className="w-16 h-16 border-4 border-blue-50 border-t-blue-600 rounded-full animate-spin mb-6"></div>
-        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">Synchronizing Intelligence...</p>
+        <p className="text-gray-400 font-black uppercase tracking-widest text-sm">Loading dashboard data...</p>
       </div>
     );
   }
@@ -246,7 +246,7 @@ export function FarmerDashboard() {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-2xl font-black text-gray-900 tracking-tight uppercase">{t('dashboard.recentBatches')}</h2>
-                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">{t('dashboard.operational_pulse')}</p>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1">Farm activity status</p>
               </div>
               <Link to="/farmer/batches" className="flex items-center gap-2 group text-blue-600 font-black text-[10px] uppercase tracking-widest">
                 {t('dashboard.viewAll')}
@@ -324,7 +324,7 @@ export function FarmerDashboard() {
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <h2 className="text-xl font-black text-gray-900 tracking-tight uppercase">{t('dashboard.system_alerts')}</h2>
-                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1 tracking-widest">{stats.unreadAlerts} {t('dashboard.actionable_items')}</p>
+                  <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mt-1 tracking-widest">{stats.unreadAlerts} items need attention</p>
                 </div>
                 <Link to="/farmer/alerts" className="p-3 bg-gray-50 text-gray-400 hover:bg-rose-50 hover:text-rose-600 rounded-2xl transition-all">
                   <Bell className="w-5 h-5" />
@@ -371,7 +371,7 @@ export function FarmerDashboard() {
               <Zap className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">{t('dashboard.intelligence_pulse')}</h4>
+              <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-1">Quick Tip</h4>
               <p className="text-sm font-bold text-gray-600 leading-snug">{t('dashboard.mortality_tip')}</p>
             </div>
           </div>
