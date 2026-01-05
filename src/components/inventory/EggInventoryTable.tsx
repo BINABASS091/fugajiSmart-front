@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { Egg, ShoppingBag, Trash2, Info, ChevronRight, TrendingUp } from 'lucide-react';
+import { useCurrency } from '../../contexts/CurrencyContext';
 
 interface EggInventory {
     id: string;
@@ -23,6 +24,8 @@ interface EggInventoryTableProps {
 }
 
 const EggInventoryTable: React.FC<EggInventoryTableProps> = ({ items, onSell, onViewInfo }) => {
+    const { formatCurrency } = useCurrency();
+    
     if (items.length === 0) {
         return (
             <div className="py-20 bg-white rounded-3xl border-2 border-dashed border-gray-100 flex flex-col items-center text-center">
@@ -89,7 +92,7 @@ const EggInventoryTable: React.FC<EggInventoryTableProps> = ({ items, onSell, on
                             <div className="bg-emerald-600 rounded-2xl p-5 text-white shadow-xl shadow-emerald-100 relative overflow-hidden group/price">
                                 <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Price per Tray</p>
                                 <div className="flex items-end gap-1">
-                                    <span className="text-2xl font-black">${item.price_per_tray.toLocaleString()}</span>
+                                    <span className="text-2xl font-black">{formatCurrency(item.price_per_tray)}</span>
                                     <ChevronRight className="w-4 h-4 mb-1.5 opacity-0 group-hover/price:opacity-100 transition-opacity" />
                                 </div>
                             </div>

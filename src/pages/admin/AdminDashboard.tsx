@@ -3,6 +3,7 @@ import { dataService } from '../../services/dataService';
 import { mockDataService } from '../../services/mockData';
 import { StatCard } from '../../components/StatCard';
 import { Card } from '../../components/ui/card';
+import { useCurrency } from '../../contexts/CurrencyContext';
 import {
   Users,
   UserCheck,
@@ -34,6 +35,7 @@ interface RecentActivity {
 }
 
 export function AdminDashboard() {
+  const { formatCurrency } = useCurrency();
   const [stats, setStats] = useState({
     totalUsers: 0,
     totalFarmers: 0,
@@ -156,7 +158,7 @@ export function AdminDashboard() {
         {[
           { label: 'Total Users', val: stats.totalUsers, sub: `${stats.verifiedFarmers} Verified`, icon: Users, color: 'blue' },
           { label: 'Active Farms', val: stats.activeFarms, sub: `Across ${stats.totalFarms} locations`, icon: Warehouse, color: 'indigo' },
-          { label: 'Monthly Income', val: `$${(stats.activeSubscriptions * 35).toLocaleString()}`, sub: 'Monthly Recurring', icon: DollarSign, color: 'emerald' },
+          { label: 'Monthly Income', val: formatCurrency(stats.activeSubscriptions * 35), sub: 'Monthly Recurring', icon: DollarSign, color: 'emerald' },
           { label: 'Critical Alerts', val: stats.criticalAlerts, sub: 'Needs Attention', icon: AlertTriangle, color: stats.criticalAlerts > 0 ? 'rose' : 'gray' },
         ].map((stat, i) => (
           <Card key={i} className="p-8 bg-white border border-gray-100 rounded-[40px] shadow-xl shadow-gray-200/40 relative overflow-hidden group">

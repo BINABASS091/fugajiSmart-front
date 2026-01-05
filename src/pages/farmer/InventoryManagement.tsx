@@ -12,6 +12,7 @@ import {
 import SubscriptionGuard from '../../components/SubscriptionGuard';
 import AddInventoryItemModal from '../../components/AddInventoryItemModal';
 import StockTransactionModal from '../../components/StockTransactionModal';
+import { useCurrency } from '../../contexts/CurrencyContext';
 
 // Specialized Components
 import FeedInventoryTable from '../../components/inventory/FeedInventoryTable';
@@ -44,6 +45,7 @@ import { format } from 'date-fns';
 type InventoryTab = 'FEED' | 'MEDICINE' | 'EQUIPMENT' | 'LABOR' | 'HEALTH' | 'EGGS' | 'HISTORY';
 
 const InventoryManagement: React.FC = () => {
+  const { formatCurrency } = useCurrency();
   const [activeTab, setActiveTab] = useState<InventoryTab>('FEED');
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -296,7 +298,7 @@ const InventoryManagement: React.FC = () => {
         {/* Statistics Benchmarking */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {[
-            { label: 'Asset Valuation', value: `$${transactions.reduce((s, t) => s + (t.total_cost || 0), 0).toLocaleString()}`, icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+            { label: 'Asset Valuation', value: formatCurrency(transactions.reduce((s, t) => s + (t.total_cost || 0), 0)), icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50' },
             { label: 'Critical Alerts', value: healthAlerts.filter(a => !a.resolved).length, icon: AlertTriangle, color: 'text-rose-600', bg: 'bg-rose-50' },
             { label: 'Active Workforce', value: laborRecords.filter(l => l.is_active).length, icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
             { label: 'Daily Collection', value: eggInventory.length > 0 ? eggInventory[0].quantity_trays : 0, icon: TrendingUp, color: 'text-amber-600', bg: 'bg-amber-50' },

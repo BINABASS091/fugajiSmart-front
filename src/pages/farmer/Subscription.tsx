@@ -1,24 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
+import { Check, X, Star, ChevronRight, Sparkles, Cpu, Fingerprint, Calendar, Crown, Zap, ShieldCheck } from 'lucide-react';
+import { useSubscription } from '../../contexts/SubscriptionContext';
+import { useCurrency } from '../../contexts/CurrencyContext';
 import { dataService } from '../../services/dataService';
 import { useAuth } from '../../contexts/AuthContext';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { useSubscription } from '../../contexts/SubscriptionContext';
 import { useToast } from '../../components/ui/toast';
-import {
-  Calendar,
-  Crown,
-  Star,
-  Zap,
-  Check,
-  X,
-  ShieldCheck,
-  ChevronRight,
-  Sparkles,
-  Cpu,
-  Fingerprint
-} from 'lucide-react';
 import { format } from 'date-fns';
 
 interface SubscriptionData {
@@ -54,6 +43,7 @@ const Subscription: React.FC = () => {
   const { t } = useLanguage();
   const { subscription, refreshSubscription } = useSubscription();
   const { toast } = useToast();
+  const { formatCurrency } = useCurrency();
   const [currentSubscription, setCurrentSubscription] = useState<SubscriptionData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -264,7 +254,7 @@ const Subscription: React.FC = () => {
                 </div>
                 <h3 className="text-2xl font-black uppercase tracking-tight mb-2">{plan.name}</h3>
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black tracking-tight">${plan.price}</span>
+                  <span className="text-4xl font-black tracking-tight">{formatCurrency(plan.price)}</span>
                   <span className={`text-[10px] font-black uppercase tracking-widest ${plan.popular ? 'opacity-60' : 'text-gray-400'}`}>/{plan.duration}</span>
                 </div>
                 <p className={`text-[10px] font-bold mt-4 uppercase tracking-widest leading-loose ${plan.popular ? 'opacity-80' : 'text-gray-500'}`}>

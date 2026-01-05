@@ -16,7 +16,8 @@ import {
   Crown,
   Boxes,
   ChevronRight,
-  TrendingUp
+  TrendingUp,
+  DollarSign
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -54,6 +55,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { to: '/farmer/knowledge', icon: Lightbulb, label: t('sidebar.knowledgeBase') },
     { to: '/farmer/alerts', icon: Bell, label: t('sidebar.alerts') },
     { to: '/farmer/subscription', icon: Crown, label: t('sidebar.subscription') },
+    { to: '/farmer/currency', icon: DollarSign, label: 'Currency' },
     { to: '/farmer/profile', icon: Settings, label: t('common.profile') },
   ];
 

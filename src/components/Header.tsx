@@ -4,6 +4,7 @@ import { dataService } from '../services/dataService';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { API_BASE_URL } from '../lib/api';
+import CurrencySelector from './CurrencySelector';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -125,6 +126,9 @@ export function Header({ onMenuClick }: HeaderProps) {
                 </>
               )}
             </div>
+
+            {/* Currency Selector */}
+            <CurrencySelector variant="toggle" className="hidden sm:flex" />
 
             {/* Notifications */}
             {user?.role === 'FARMER' && (

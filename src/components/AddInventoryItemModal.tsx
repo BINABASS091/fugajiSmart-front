@@ -12,6 +12,7 @@ import {
   eggsApi
 } from '../lib/api';
 import { useAuth } from '../contexts/AuthContext';
+import { useCurrency } from '../contexts/CurrencyContext';
 import {
   X, Package, Tag, Hash, DollarSign, AlertTriangle,
   Calendar, User, Pill, Wrench, Box, ChevronRight,
@@ -92,6 +93,7 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
   item
 }) => {
   const { user } = useAuth();
+  const { formatCurrency } = useCurrency();
   const [formData, setFormData] = useState<InventoryItem>({
     name: '',
     category: '',
@@ -476,18 +478,21 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
                   </div>
                 </div>
               )}
-              <div className="sm:col-span-2 space-y-2">
-                <Label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Source / Supplier</Label>
-                <div className="relative">
-                  <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <Input
-                    value={formData.supplier || ''}
-                    onChange={(e) => handleInputChange('supplier', e.target.value)}
-                    placeholder="Supplier or Vendor details..."
-                    className="pl-14 py-8 rounded-2xl border-none bg-gray-100 shadow-sm focus:ring-4 focus:ring-blue-500/10 text-lg font-black"
-                  />
+              {/* Supplier Field - Only for product categories */}
+              {(['FEED', 'MEDICINE', 'EQUIPMENT'].includes(formData.category)) && (
+                <div className="sm:col-span-2 space-y-2">
+                  <Label className="text-xs font-black text-gray-400 uppercase tracking-widest px-1">Source / Supplier</Label>
+                  <div className="relative">
+                    <User className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Input
+                      value={formData.supplier || ''}
+                      onChange={(e) => handleInputChange('supplier', e.target.value)}
+                      placeholder="Supplier or Vendor details..."
+                      className="pl-14 py-8 rounded-2xl border-none bg-gray-100 shadow-sm focus:ring-4 focus:ring-blue-500/10 text-lg font-black"
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Specialized Fields based on Category */}
               {formData.category === 'MEDICINE' && (
@@ -629,7 +634,7 @@ const AddInventoryItemModal: React.FC<AddInventoryItemModalProps> = ({
               </div>
               <div>
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Transaction</p>
-                <p className="text-2xl font-black text-gray-900">${totalCost.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+                <p className="text-2xl font-black text-gray-900">{formatCurrency(totalCost)}</p>
               </div>
             </div>
 

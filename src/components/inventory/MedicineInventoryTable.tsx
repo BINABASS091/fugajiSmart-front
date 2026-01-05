@@ -105,7 +105,7 @@ const MedicineInventoryTable: React.FC<MedicineInventoryTableProps> = ({ items, 
                             <Button
                                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white border-none rounded-xl font-black text-xs uppercase tracking-widest transition-all shadow-lg shadow-blue-200 active:scale-95 py-6"
                                 onClick={() => onAdminister(item)}
-                                disabled={isExpired}
+                                disabled={isExpired === true}
                             >
                                 <ShieldCheck className="w-4 h-4 mr-2" />
                                 Administer

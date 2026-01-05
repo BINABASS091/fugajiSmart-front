@@ -91,6 +91,12 @@ export const authApi = {
       body: form,
     });
   },
+  async updateCurrency(currency: string) {
+    return fetchApi('auth/currency/', {
+      method: 'PATCH',
+      body: JSON.stringify({ preferred_currency: currency }),
+    });
+  },
 };
 
 // Batches API

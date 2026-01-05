@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
-import { Users, Phone, DollarSign, Briefcase, UserPlus, ExternalLink } from 'lucide-react';
+import { Users, Phone, Briefcase, UserPlus, ExternalLink } from 'lucide-react';
+import { useCurrency } from '../../contexts/CurrencyContext';
 
 interface LaborRecord {
     id: string;
@@ -22,6 +23,8 @@ interface LaborRecordsTableProps {
 }
 
 const LaborRecordsTable: React.FC<LaborRecordsTableProps> = ({ records, onAddWorker, onEditWorker }) => {
+    const { formatCurrency } = useCurrency();
+    
     if (records.length === 0) {
         return (
             <div className="py-20 bg-white rounded-3xl border-2 border-dashed border-gray-100 flex flex-col items-center text-center">
@@ -75,7 +78,7 @@ const LaborRecordsTable: React.FC<LaborRecordsTableProps> = ({ records, onAddWor
                             <div className="absolute top-0 right-0 w-16 h-16 bg-white/10 rounded-full -mr-8 -mt-8"></div>
                             <p className="text-[10px] font-black uppercase tracking-widest opacity-80 mb-1">Wage Details ({record.payment_frequency})</p>
                             <div className="flex items-end gap-1">
-                                <span className="text-2xl font-black">${record.wage_amount.toLocaleString()}</span>
+                                <span className="text-2xl font-black">{formatCurrency(record.wage_amount)}</span>
                                 <span className="text-[10px] font-black opacity-60 mb-1.5 whitespace-nowrap">/ {record.payment_frequency}</span>
                             </div>
                         </div>

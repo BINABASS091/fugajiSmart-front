@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { useCurrency } from '../../contexts/CurrencyContext';
 import {
   DollarSign,
   Search,
@@ -33,6 +34,7 @@ interface FarmerSubscription {
 }
 
 export function SubscriptionsManagement() {
+  const { formatCurrency } = useCurrency();
   const [farmerSubscriptions, setFarmerSubscriptions] = useState<FarmerSubscription[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -224,7 +226,7 @@ export function SubscriptionsManagement() {
             </div>
             <div>
               <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Total Revenue</h4>
-              <p className="text-4xl font-black text-gray-900 tracking-tighter">${stats.totalRevenue.toLocaleString()}</p>
+              <p className="text-4xl font-black text-gray-900 tracking-tighter">{formatCurrency(stats.totalRevenue)}</p>
             </div>
             <div className="flex items-center gap-2 text-[10px] font-black text-blue-600 uppercase">
               <Activity className="w-3.5 h-3.5" />
@@ -349,11 +351,11 @@ export function SubscriptionsManagement() {
                       <td className="px-10 py-8">
                         {f.amount_paid > 0 ? (
                           <div className="flex flex-col">
-                            <span className="text-sm font-black text-emerald-600 tracking-tighter">${f.amount_paid.toLocaleString()}</span>
+                            <span className="text-sm font-black text-emerald-600 tracking-tighter">{formatCurrency(f.amount_paid)}</span>
                             <span className="text-[8px] font-black text-gray-400 uppercase tracking-widest">Paid In Full</span>
                           </div>
                         ) : (
-                          <span className="text-sm font-black text-gray-300 tracking-tighter">$0.00</span>
+                          <span className="text-sm font-black text-gray-300 tracking-tighter">{formatCurrency(0)}</span>
                         )}
                       </td>
                       <td className="px-10 py-8">

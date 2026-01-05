@@ -3,6 +3,7 @@ import { ToastProvider } from './components/ui/toast';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import { SubscriptionProvider } from './contexts/SubscriptionContext';
+import { CurrencyProvider } from './contexts/CurrencyContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { DashboardLayout } from './components/DashboardLayout';
 
@@ -55,6 +56,7 @@ const AlertsPage = lazyResolve(() => import('./pages/farmer/AlertsPage'), 'Alert
 const ProfilePage = lazyResolve(() => import('./pages/farmer/ProfilePage'), 'ProfilePage');
 const Subscription = lazyResolve(() => import('./pages/farmer/Subscription')); // uses default export
 const InventoryManagement = lazyResolve(() => import('./pages/farmer/InventoryManagement')); // uses default export
+const CurrencySettings = lazyResolve(() => import('./pages/farmer/CurrencySettings'), 'CurrencySettings');
 
 const LoadingSpinner = () => (
   <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -77,9 +79,10 @@ function App() {
   return (
     <BrowserRouter>
       <ToastProvider>
-        <SubscriptionProvider>
-          <Suspense fallback={<LoadingSpinner />}>
-            <Routes>
+        <CurrencyProvider>
+          <SubscriptionProvider>
+            <Suspense fallback={<LoadingSpinner />}>
+              <Routes>
               <Route path="/" element={<RootRedirect />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
@@ -262,11 +265,20 @@ function App() {
                   </DashboardLayout>
                 </ProtectedRoute>
               } />
+
+              <Route path="/farmer/currency" element={
+                <ProtectedRoute requiredRole="FARMER">
+                  <DashboardLayout>
+                    <CurrencySettings />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              } />
             </Routes>
           </Suspense>
         </SubscriptionProvider>
-      </ToastProvider>
-    </BrowserRouter>
+      </CurrencyProvider>
+    </ToastProvider>
+  </BrowserRouter>
   );
 }
 

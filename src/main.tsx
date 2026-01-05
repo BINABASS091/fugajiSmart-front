@@ -8,7 +8,15 @@ import { LanguageProvider } from './contexts/LanguageContext';
 // Initialize i18next
 import './i18n/config';
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || "150773637324-jv7p4bnsbaqpeiad3uihggm7ac1rqi3m.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+if (!GOOGLE_CLIENT_ID) {
+  console.warn('VITE_GOOGLE_CLIENT_ID not set. Google login will not work.');
+  console.log('To fix this:');
+  console.log('1. Create a .env.local file in the frontend root');
+  console.log('2. Add: VITE_GOOGLE_CLIENT_ID=your_google_client_id');
+  console.log('3. Restart the development server');
+}
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
